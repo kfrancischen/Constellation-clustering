@@ -116,7 +116,7 @@ class Kmeans:
 		CONTINUE_FLAG = True
 		while CONTINUE_FLAG:
 		 	CONTINUE_FLAG = False
-		 	preAssignments = self.assignments
+		 	preCentroid = copy.deepcopy(self.centroid)
 			# step 1: updating the assignments
 			for star in self.assignments:
 				dist = []
@@ -146,10 +146,14 @@ class Kmeans:
 				self.centroid[key][0] /= norm
 				self.centroid[key][1] /= norm
 				self.centroid[key][2] /= norm
-
 			# step 3: update continue flag
-			for i in range(len(self.assignments)):
-				if preAssignments[i]['assignment'] != self.assignments[i]['assignment']:
+			for i in range(len(self.centroid)):
+				key = 'centroid_' + str(i+1)
+				diff_x = preCentroid[key][0] - self.centroid[key][0]
+				diff_y = preCentroid[key][1] - self.centroid[key][1]
+				diff_z = preCentroid[key][2] - self.centroid[key][2]
+				print basicFun.getNorm([diff_x, diff_y, diff_z])
+				if basicFun.getNorm([diff_x, diff_y, diff_z]) >= 0.0001:
 					CONTINUE_FLAG = True
 					break
 		return
