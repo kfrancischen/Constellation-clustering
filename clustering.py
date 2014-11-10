@@ -10,10 +10,10 @@ database = dataProcessing.transformCoordinate(database)
 starsWithName = dataProcessing.chooseStarWithName(database)
 
 # choosing the stars with brighness higher than 4.5
-starsNeedClustering = dataProcessing.selectBrightness(starsWithName, 2.6)
+starsNeedClustering = dataProcessing.selectBrightness(starsWithName, 4.5)
 
 # running K means for 1000 times with 20 centroids
-standardKMeans = algorithms.Kmeans(starsNeedClustering,10)
+standardKMeans = algorithms.Kmeans(starsNeedClustering,88)
 #standardKMeans.randInitCentroid()
 standardKMeans.decisiveInitCentroid()
 #standardKMeans.runStandardKmeansWithIter(2000)
