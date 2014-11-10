@@ -18,10 +18,15 @@ class Kmeans:
 		'''
 		self.stars = stars
 		self.K = K
-		self.centroid={}
+		self.centroid = {}
 		self.assignments = copy.deepcopy(stars)
+
 		for idx in range(len(self.assignments)):
 			self.assignments[idx]['assignment'] = 'centroid_1'
+
+		for i in range(K):
+			key = 'centroid_' + str(i+1)
+			self.centroid[key] = [0, 0, 0]
 
 	def randInitCentroid(self):
 		'''
@@ -42,6 +47,9 @@ class Kmeans:
 		for i in range(self.K):
 			key = 'centroid_' + str(i+1)
 			self.centroid[key] = [chosenStars[i]['x_coor'], chosenStars[i]['y_coor'], chosenStars[i]['z_coor']]
+		return
+	
+	def densityBasedInitCentroid(self):
 		return
 
 	def getCluster(self,centroidIdx):
@@ -84,7 +92,8 @@ class Kmeans:
 				x = star['x_coor']
 				y = star['y_coor']
 				z = star['z_coor']
-				for key in self.centroid:
+				for i in range(len(self.centroid)):
+					key = 'centroid_' + str(i+1)
 					x_center = self.centroid[key][0]
 					y_center = self.centroid[key][1]
 					z_center = self.centroid[key][2]
@@ -117,13 +126,15 @@ class Kmeans:
 		while CONTINUE_FLAG:
 		 	CONTINUE_FLAG = False
 		 	preCentroid = copy.deepcopy(self.centroid)
+
 			# step 1: updating the assignments
 			for star in self.assignments:
 				dist = []
 				x = star['x_coor']
 				y = star['y_coor']
 				z = star['z_coor']
-				for key in self.centroid:
+				for i in range(len(self.centroid)):
+					key = 'centroid_' + str(i+1)
 					x_center = self.centroid[key][0]
 					y_center = self.centroid[key][1]
 					z_center = self.centroid[key][2]
@@ -146,14 +157,14 @@ class Kmeans:
 				self.centroid[key][0] /= norm
 				self.centroid[key][1] /= norm
 				self.centroid[key][2] /= norm
+
 			# step 3: update continue flag
 			for i in range(len(self.centroid)):
 				key = 'centroid_' + str(i+1)
 				diff_x = preCentroid[key][0] - self.centroid[key][0]
 				diff_y = preCentroid[key][1] - self.centroid[key][1]
 				diff_z = preCentroid[key][2] - self.centroid[key][2]
-				print basicFun.getNorm([diff_x, diff_y, diff_z])
-				if basicFun.getNorm([diff_x, diff_y, diff_z]) >= 0.0001:
+				if basicFun.getNorm([diff_x, diff_y, diff_z]) >= 0.000001:
 					CONTINUE_FLAG = True
 					break
 		return
