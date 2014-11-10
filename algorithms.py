@@ -12,21 +12,22 @@ class Kmeans:
 	'''
 		This class will take in all the filtered data and perform K-means algorithm
 	'''
-	def __init__(self, stars, K):
+	def __init__(self, stars, K, centroid = None):
 		'''
 			initializing the class
 		'''
 		self.stars = stars
 		self.K = K
-		self.centroid = {}
 		self.assignments = copy.deepcopy(stars)
-
 		for idx in range(len(self.assignments)):
 			self.assignments[idx]['assignment'] = 'centroid_1'
-
-		for i in range(K):
-			key = 'centroid_' + str(i+1)
-			self.centroid[key] = [0, 0, 0]
+		if centroid == None:
+		 	self.centroid = {}
+			for i in range(K):
+				key = 'centroid_' + str(i+1)
+				self.centroid[key] = [0, 0, 0]
+		else:
+		  self.centroid = centroid
 
 	def randInitCentroid(self):
 		'''
@@ -50,6 +51,9 @@ class Kmeans:
 		return
 	
 	def densityBasedInitCentroid(self):
+		'''
+			This function is for initializing centroid based on data density distribution
+		'''
 		return
 
 	def getCluster(self,centroidIdx):
