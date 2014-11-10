@@ -1,8 +1,6 @@
 import json
-from pprint import pprint
 import math
-from math import sin
-from math import cos
+import basicFun
 
 inputFileName = 'database.json'
 
@@ -26,9 +24,9 @@ def transformCoordinate(data):
 			continue
 		data[i]['theta'] *= math.pi/180
 		data[i]['phi'] *= math.pi/180
-		data[i]['x_coor'] = cos(data[i]['theta']) * cos(data[i]['phi'])
-		data[i]['y_coor'] = cos(data[i]['theta']) * sin(data[i]['phi'])
-		data[i]['z_coor'] = sin(data[i]['theta'])
+		data[i]['x_coor'] = basicFun.getXCoor(data[i]['theta'], data[i]['phi'])
+		data[i]['y_coor'] = basicFun.getYCoor(data[i]['theta'], data[i]['phi'])
+		data[i]['z_coor'] = basicFun.getZCoor(data[i]['theta'], data[i]['phi'])
 	return data
 
 def chooseStarWithName(data):
