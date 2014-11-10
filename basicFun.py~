@@ -1,0 +1,24 @@
+import math
+
+def getEuclideanDistance(list_1, list_2):
+	'''
+		This function will calculate the euclidean distance between two 3D points
+	'''
+	dist = 0
+	for i in range(len(list_1)):
+		dist += (list_1[i]-list_2[i])**2
+	return math.sqrt(dist)
+
+def getSphericalDistance(list_1, list_2):
+	'''
+		This function will calculate the spherical distance on two 3D points
+	'''
+	dist = getEuclideanDistance(list_1,list_2)
+	return 2*asin(0.5*dist)
+
+def cosDissimilarity(list_1, list_2):
+	'''
+			This function will calculate the cosine dissimilarity of two 3D points
+	'''
+	return 1 - (list_1[0] * list_2[0] + list_1[1] * list_2[1] + list_1[2] * list_2[2])
+
