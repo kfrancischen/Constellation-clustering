@@ -77,8 +77,11 @@ class Kmeans:
 		for idx in range(len(self.assignments)):
 			star = self.assignments[idx]
 			belong = star['assignment']
-			dissimilarity += basicFun.cosDissimilarity([star['x_coor'], star['y_coor'], star['z_coor']], \
+#			dissimilarity += basicFun.cosDissimilarity([star['x_coor'], star['y_coor'], star['z_coor']], \
+#					[self.centroid[belong][0], self.centroid[belong][1], self.centroid[belong][2]])
+			dissimilarity += basicFun.weightedCosDissimilarity([star['x_coor'], star['y_coor'], star['z_coor']], \
 					[self.centroid[belong][0], self.centroid[belong][1], self.centroid[belong][2]])
+		return dissimilarity
 		return dissimilarity
 
 	def runStandardKmeansWithIter(self, maxIter):
@@ -101,7 +104,8 @@ class Kmeans:
 					x_center = self.centroid[key][0]
 					y_center = self.centroid[key][1]
 					z_center = self.centroid[key][2]
-					dist.append(basicFun.cosDissimilarity([x,y,z], [x_center, y_center, z_center]))
+#					dist.append(basicFun.cosDissimilarity([x,y,z], [x_center, y_center, z_center]))
+					dist.append(basicFun.weightedCosDissimilarity([x,y,z], [x_center, y_center, z_center], star['brightness']))
 				idx = dist.index(min(dist))
 				star['assignment'] = 'centroid_' + str(idx+1)
 
@@ -142,7 +146,8 @@ class Kmeans:
 					x_center = self.centroid[key][0]
 					y_center = self.centroid[key][1]
 					z_center = self.centroid[key][2]
-					dist.append(basicFun.cosDissimilarity([x,y,z], [x_center, y_center, z_center]))
+#					dist.append(basicFun.cosDissimilarity([x,y,z], [x_center, y_center, z_center]))
+					dist.append(basicFun.weightedCosDissimilarity([x,y,z], [x_center, y_center, z_center], star['brightness']))
 				idx = dist.index(min(dist))
 				star['assignment'] = 'centroid_' + str(idx+1)
 			

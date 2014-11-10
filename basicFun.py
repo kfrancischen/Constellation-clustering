@@ -43,6 +43,9 @@ def cosDissimilarity(list_1, list_2):
 	'''
 	return 1 - (list_1[0] * list_2[0] + list_1[1] * list_2[1] + list_1[2] * list_2[2])
 
+def weightedCosDissimilarity(list_1, list_2, brightness):
+	return math.exp(-brightness)*cosDissimilarity(list_1, list_2)
+
 def getNorm(a_list):
 	'''
 		This function will calculate the norm of a 3D vector
