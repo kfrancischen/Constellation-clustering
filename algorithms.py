@@ -16,7 +16,6 @@ class Kmeans:
 		'''
 			initializing the class
 		'''
-		self.stars = stars
 		self.K = K
 		self.assignments = copy.deepcopy(stars)
 		for idx in range(len(self.assignments)):
@@ -181,5 +180,52 @@ class Kmeans:
 
 
 # algorithm 2:
+from sklearn.cluster import DBSCAN
+from scipy.spatial import distance
+import numpy
+class densityBasedClustering:
+	'''
+		This class will take all the filtered data and perform DBSCAN
+	'''
+	def __init__(self, stars, Eps, minDist):
+		self.assignments = copy.deepcopy(stars)
+		self.Eps = Eps
+		self.minDist = minDist
+		self.coordinates = []
+		self.numOfClusters = 0
+		for i in range(len(self.assignments)):
+			coordinate = [self.assignments[i]['x_coor'], self.assignments[i]['y_coor'], self.assignments[i]['z_coor']]
+			self.coordinates.append(coordinate)
 
+	def runDBA(self):
+		distMatrix = distance.squareform(distance.pdist(self.coordinates, 'cosine'))
+		db = DBSCAN(eps = self.Eps, min_samples = self.minDist).fit(distMatrix)
+		belongs = db.labels_.tolist()
+		print belongs
+		for i in range(len(belongs)):
+			self.assignments[i]['assignment'] = 'centroid_' + str(belongs[i]+1)
+		self.numOfClusters = len(set(belongs)) - (1 if -1 in belongs else 0)
+
+	def getNumOfClusters(self):
+		return self.numOfClusters
+
+	def getCluster(self, clusterIdx):
+		cluster = []
+		key = 'centroid' + str(clusterIdx+1)
+		for i in range(len(self.assignments)):
+			if self.assignments[i]['assignment'] == key:
+				cluster.append(self.assignments[i])
+		return cluster
+
+	def getCoordinates(self):
+		return self.coordinates
+	
+	def getNoise(self):
+		noise = []
+		for i in range(len(self.assignments)):
+			if self.assignments[i]['assignment'] == 'centroid_-1':
+				noise.append(self.assignments[i])
+		return noise
+
+		
 # algorithm 3:
