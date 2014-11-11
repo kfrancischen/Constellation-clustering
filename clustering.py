@@ -9,7 +9,11 @@ parser.add_argument('-a','--algorithm',type = str, help = 'Choose the algorithm'
 algorithm = parser.add_subparsers(help = 'algorithm choices')
 kmeans_parser = algorithm.add_parser('k', help = 'number of clusters')
 kmeans_parser.add_argument('K', type = int, help = 'input the number of clusters')
-DBS_parser = algorithm.add_parser('m',help = 'not implemented yet')
+eps_parser = algorithm.add_parser('eps',help = 'the epsilon value of a cluster')
+eps_parser.add_argument('Eps', type = float, help = 'the input epsilon')
+min_dist = eps_parser.add_subparsers(help = ' the minimum distance')
+minDist_parser = min_dist.add_parser('mindist', help = 'minimum distance for a reachable point')
+minDist_parser.add_argument('minDist', type = int, help = 'the value of minimum distance')
 args = parser.parse_args()
 
 
@@ -38,6 +42,12 @@ if args.algorithm == 'Kmeans':
 	#print len(assignments), len(cluster_1), cluster_1
 	# print centroids, assignments
 elif args.algorithm == 'DBSCAN':
-	print 'not implemented yet'
+	Eps = args.Eps
+	minDist = args.minDist
+	standardDBS = algorithms.densityBasedClustering(starsNeedClustering, Eps, minDist) 
+	standardDBS.runDBA()
+	print standardDBS.getNumOfClusters()
+	visualization.visualize(standardDBS.assignments)
+	
 
 
