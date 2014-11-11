@@ -10,7 +10,7 @@ algorithm = parser.add_subparsers(help = 'algorithm choices')
 
 '''
 	Running K means algorithm:
-	python cluster.py -a Kmeans k [the k value]
+	python clustering.py -a Kmeans k [the k value]
 '''
 kmeans_parser = algorithm.add_parser('k', help = 'number of clusters')
 kmeans_parser.add_argument('K', type = int, help = 'input the number of clusters')
