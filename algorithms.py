@@ -188,6 +188,11 @@ class densityBasedClustering:
 		This class will take all the filtered data and perform DBSCAN
 	'''
 	def __init__(self, stars, Eps, minDist):
+		'''
+			This function will initialize the class
+			@Eps, the eps value for DBSCAN
+			@minDist, minimum distance for DBSCAN
+		'''
 		self.assignments = copy.deepcopy(stars)
 		self.Eps = Eps
 		self.minDist = minDist
@@ -198,6 +203,9 @@ class densityBasedClustering:
 			self.coordinates.append(coordinate)
 
 	def runDBA(self):
+		'''
+			This function runs the DBSCAN algorithm based on sklearn
+		'''
 		distMatrix = distance.squareform(distance.pdist(self.coordinates, 'cosine'))
 		db = DBSCAN(eps = self.Eps, min_samples = self.minDist).fit(distMatrix)
 		belongs = db.labels_.tolist()
@@ -207,9 +215,15 @@ class densityBasedClustering:
 		self.numOfClusters = len(set(belongs)) - (1 if -1 in belongs else 0)
 
 	def getNumOfClusters(self):
+		'''
+			This function calculates the number of clusters
+		'''
 		return self.numOfClusters
 
 	def getCluster(self, clusterIdx):
+		'''
+			This function outputs the cluster with clusterIdx
+		'''
 		cluster = []
 		key = 'centroid' + str(clusterIdx+1)
 		for i in range(len(self.assignments)):
@@ -218,9 +232,15 @@ class densityBasedClustering:
 		return cluster
 
 	def getCoordinates(self):
+		'''
+			This function outputs all the coordinates of the stars'
+		'''
 		return self.coordinates
 	
 	def getNoise(self):
+		'''
+			This function outputs the noise of the data
+		'''
 		noise = []
 		for i in range(len(self.assignments)):
 			if self.assignments[i]['assignment'] == 'centroid_-1':
