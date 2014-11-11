@@ -179,7 +179,8 @@ class Kmeans:
 		
 
 
-# algorithm 2:
+# algorithm 2: standard DBSCAN algorithm, using sklearn package
+
 from sklearn.cluster import DBSCAN
 from scipy.spatial import distance
 import numpy
