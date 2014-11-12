@@ -208,6 +208,13 @@ class densityBasedClustering:
 			This function runs the DBSCAN algorithm based on sklearn
 		'''
 		distMatrix = distance.squareform(distance.pdist(self.coordinates, 'cosine'))
+
+		# associate the distance matrix with a weight, this part might be commented out
+		for i in range(distMatrix.shape[0]):
+			for j in range(distMatrix.shape[1]):
+				#distMatrix[i,j] *= numpy.exp(self.assignments[i]['brightness'] + self.assignments[j]['brightness'])
+				distMatrix[i,j] *= self.assignments[i]['brightness'] + self.assignments[j]['brightness']
+
 		db = DBSCAN(eps = self.Eps, min_samples = self.minDist).fit(distMatrix)
 		belongs = db.labels_.tolist()
 		print belongs
