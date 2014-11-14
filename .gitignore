@@ -28,6 +28,7 @@ var/
 *.manifest
 *.spec
 *.pyc
+*.eps
 
 # Installer logs
 pip-log.txt
