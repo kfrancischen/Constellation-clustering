@@ -145,8 +145,8 @@ class Kmeans:
 					x_center = self.centroid[key][0]
 					y_center = self.centroid[key][1]
 					z_center = self.centroid[key][2]
-#					dist.append(basicFun.cosDissimilarity([x,y,z], [x_center, y_center, z_center]))
-					dist.append(basicFun.weightedCosDissimilarity([x,y,z], [x_center, y_center, z_center], star['brightness']))
+					dist.append(basicFun.cosDissimilarity([x,y,z], [x_center, y_center, z_center]))
+#					dist.append(basicFun.weightedCosDissimilarity([x,y,z], [x_center, y_center, z_center], star['brightness']))
 				idx = dist.index(min(dist))
 				star['assignment'] = 'centroid_' + str(idx+1)
 			
@@ -210,10 +210,10 @@ class densityBasedClustering:
 		distMatrix = distance.squareform(distance.pdist(self.coordinates, 'cosine'))
 
 		# associate the distance matrix with a weight, this part might be commented out
-		for i in range(distMatrix.shape[0]):
-			for j in range(distMatrix.shape[1]):
+#		for i in range(distMatrix.shape[0]):
+#			for j in range(distMatrix.shape[1]):
 				#distMatrix[i,j] *= numpy.exp(self.assignments[i]['brightness'] + self.assignments[j]['brightness'])
-				distMatrix[i,j] *= self.assignments[i]['brightness'] + self.assignments[j]['brightness']
+				#distMatrix[i,j] *= self.assignments[i]['brightness'] + self.assignments[j]['brightness']
 
 		db = DBSCAN(eps = self.Eps, min_samples = self.minDist).fit(distMatrix)
 		belongs = db.labels_.tolist()
@@ -251,7 +251,7 @@ class densityBasedClustering:
 		'''
 		noise = []
 		for i in range(len(self.assignments)):
-			if self.assignments[i]['assignment'] == 'centroid_-1':
+			if self.assignments[i]['assignment'] == 'centroid_0':
 				noise.append(self.assignments[i])
 		return noise
 

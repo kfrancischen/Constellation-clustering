@@ -35,15 +35,15 @@ database = dataProcessing.transformCoordinate(database)
 starsWithName = dataProcessing.chooseStarWithName(database)
 
 # choosing the stars with brighness higher than 4.5
-starsNeedClustering = dataProcessing.selectBrightness(starsWithName, 4.5)
-
-# if the user runs kmeans
+starsNeedClustering = dataProcessing.selectBrightness(starsWithName, 4.6)
+print len(starsNeedClustering)
+# if the user runs kmeans 
 if args.algorithm == 'Kmeans':
 	K = args.K
 	# running K means for 1000 times with 20 centroids
 	standardKMeans = algorithms.Kmeans(starsNeedClustering,K)
-	#standardKMeans.randInitCentroid()
-	standardKMeans.decisiveInitCentroid()
+	standardKMeans.randInitCentroid()
+	#standardKMeans.decisiveInitCentroid()
 	#standardKMeans.runStandardKmeansWithIter(2000)
 	standardKMeans.runStandardKmeansWithoutIter()
 
@@ -61,6 +61,8 @@ elif args.algorithm == 'DBSCAN':
 	standardDBS = algorithms.densityBasedClustering(starsNeedClustering, Eps, minDist) 
 	standardDBS.runDBA()
 	print standardDBS.getNumOfClusters()
+	noise = standardDBS.getNoise()
+	print 'Number of noise stars: ', len(noise)
 	visualization.visualize(standardDBS.assignments)
 	
 
