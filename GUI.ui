@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Widget</string>
   </property>
-  <widget class="QGraphicsView" name="graphicsView">
+  <widget class="QGraphicsView" name="resultView">
    <property name="geometry">
     <rect>
      <x>370</x>
@@ -23,7 +23,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox">
+  <widget class="QComboBox" name="algorithmBox">
    <property name="geometry">
     <rect>
      <x>90</x>
@@ -33,20 +33,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>700</y>
-     <width>171</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>PushButton</string>
-   </property>
-  </widget>
-  <widget class="QTableView" name="tableView">
+  <widget class="QTableView" name="parametersView">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -56,7 +43,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="clearBotton">
    <property name="geometry">
     <rect>
      <x>640</x>
@@ -66,39 +53,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>Clear</string>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="plainTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>60</y>
-     <width>131</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Ubuntu</family>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="readOnly">
-    <bool>true</bool>
-   </property>
-   <property name="plainText">
-    <string>Algorithms</string>
-   </property>
-   <property name="backgroundVisible">
-    <bool>false</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QPushButton" name="viewBotton">
    <property name="geometry">
     <rect>
      <x>870</x>
@@ -108,20 +66,65 @@
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>View Clusters</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="runBotton">
    <property name="geometry">
     <rect>
      <x>90</x>
      <y>700</y>
-     <width>171</width>
+     <width>161</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>Run</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="saveBotton">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>700</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="algorithmLabel">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>70</y>
+     <width>121</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Algorithms</string>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="exitBotton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>51</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Exit</string>
    </property>
   </widget>
  </widget>
