@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QTableWidget, QTableWidgetItem, QHeaderView
+from PyQt5.QtWidgets import QApplication, QWidget, QTableWidget, QTableWidgetItem, QHeaderView, QFileDialog, QMessageBox
 from PyQt5.QtGui import *
 from PyQt5.QtCore import*
 from GUI import *
@@ -6,6 +6,7 @@ import sys
 import dataProcessing
 import algorithms
 import visualization
+import os
 
 # this class is for the user interface of the software
 class clusteringApplication(QWidget):
@@ -18,7 +19,7 @@ class clusteringApplication(QWidget):
 		
 		self.ui = Ui_Widget()
 		self.ui.setupUi(self)
-		self.algorithmList = ['','K-means','DBSCAN']
+		self.algorithmList = ['','K-means','DBSCAN','Hierachical','Spectral']
 		self.database = dataProcessing.readJson()
 		self.database = dataProcessing.transformCoordinate(self.database)
 		self.starsWithName = dataProcessing.chooseStarWithName(self.database)	
@@ -69,7 +70,7 @@ class clusteringApplication(QWidget):
 		'''
 			add action to the save button
 		'''
-		
+		self.ui.saveButton.clicked.connect(self._savedata)
 		return
 
 	def addActionToClearButton(self):
@@ -104,12 +105,29 @@ class clusteringApplication(QWidget):
 		self.ui.algorithmBox.setCurrentIndex(0)
 		self.ui.parameterWidget.clearContents()
 		self.ui.clusteringResults.clear()
+		return
 
 	def _visualization(self): 
 		'''
 			the action of visualizing button
 		'''
 		visualization.visualize(self.assignments)	
+		return
+
+	def _savedata(self):
+		'''
+			the action of saving data
+		'''
+		filename = QFileDialog.getSaveFileName(self, 'Save File',os.path.expanduser('~'), 'plain text file (*.txt *.dat)')
+		try:
+			fname = open(filename[0], 'w')
+			filedata = str(self.ui.clusteringResults.toPlainText())
+			fname.write(filedata)
+			fname.close()
+		except:
+			QMessageBox.information(self, 'Warning!', 'Data not saved!', QMessageBox.Ok)
+		return
+
 
 	def _run_algorithms(self):
 		'''
@@ -121,7 +139,6 @@ class clusteringApplication(QWidget):
 			bright_th = float(self.ui.parameterWidget.item(0,1).text())
 			K = int(self.ui.parameterWidget.item(1,1).text())
 			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th) 
-			print len(starsNeedClustering)
 			standardKmeans = algorithms.Kmeans(starsNeedClustering, K)
 			standardKmeans.randInitCentroid()
 			standardKmeans.runStandardKmeansWithoutIter()
@@ -162,6 +179,7 @@ class clusteringApplication(QWidget):
 #			visualization.visualize(standardDBS.assignments)
 			self.assignments = standardDBS.assignments
 			
+		return
 
 # create instances
 app = QApplication(sys.argv)
