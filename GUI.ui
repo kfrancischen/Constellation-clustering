@@ -16,16 +16,6 @@
   <property name="windowTitle">
    <string>Constellation Clustering</string>
   </property>
-  <widget class="QGraphicsView" name="resultView">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>60</y>
-     <width>671</width>
-     <height>611</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QComboBox" name="algorithmBox">
    <property name="geometry">
     <rect>
@@ -36,20 +26,10 @@
     </rect>
    </property>
   </widget>
-  <widget class="QTableView" name="parametersView">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>180</y>
-     <width>301</width>
-     <height>491</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QPushButton" name="clearButton">
    <property name="geometry">
     <rect>
-     <x>640</x>
+     <x>860</x>
      <y>700</y>
      <width>161</width>
      <height>41</height>
@@ -59,23 +39,10 @@
     <string>Clear</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="viewButton">
-   <property name="geometry">
-    <rect>
-     <x>870</x>
-     <y>700</y>
-     <width>161</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>View Clusters</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="runButton">
    <property name="geometry">
     <rect>
-     <x>90</x>
+     <x>110</x>
      <y>700</y>
      <width>161</width>
      <height>41</height>
@@ -88,7 +55,7 @@
   <widget class="QPushButton" name="saveButton">
    <property name="geometry">
     <rect>
-     <x>410</x>
+     <x>650</x>
      <y>700</y>
      <width>161</width>
      <height>41</height>
@@ -115,6 +82,62 @@
    </property>
    <property name="text">
     <string>Algorithms</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="parameterWidget">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>190</y>
+     <width>256</width>
+     <height>481</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QScrollArea" name="scrollArea">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>80</y>
+     <width>631</width>
+     <height>581</height>
+    </rect>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>629</width>
+      <height>579</height>
+     </rect>
+    </property>
+    <widget class="QPlainTextEdit" name="clusteringResults">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>629</width>
+       <height>579</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="saveButton_2">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>700</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>visualizing</string>
    </property>
   </widget>
  </widget>
