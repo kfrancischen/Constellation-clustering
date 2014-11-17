@@ -76,11 +76,10 @@ class Kmeans:
 		for idx in range(len(self.assignments)):
 			star = self.assignments[idx]
 			belong = star['assignment']
-#			dissimilarity += basicFun.cosDissimilarity([star['x_coor'], star['y_coor'], star['z_coor']], \
-#					[self.centroid[belong][0], self.centroid[belong][1], self.centroid[belong][2]])
-			dissimilarity += basicFun.weightedCosDissimilarity([star['x_coor'], star['y_coor'], star['z_coor']], \
+			dissimilarity += basicFun.cosDissimilarity([star['x_coor'], star['y_coor'], star['z_coor']], \
 					[self.centroid[belong][0], self.centroid[belong][1], self.centroid[belong][2]])
-		return dissimilarity
+#			dissimilarity += basicFun.weightedCosDissimilarity([star['x_coor'], star['y_coor'], star['z_coor']], \
+#					[self.centroid[belong][0], self.centroid[belong][1], self.centroid[belong][2]])
 		return dissimilarity
 
 	def runStandardKmeansWithIter(self, maxIter):
@@ -232,7 +231,7 @@ class densityBasedClustering:
 			This function outputs the cluster with clusterIdx
 		'''
 		cluster = []
-		key = 'centroid' + str(clusterIdx+1)
+		key = 'centroid_' + str(clusterIdx+1)
 		for i in range(len(self.assignments)):
 			if self.assignments[i]['assignment'] == key:
 				cluster.append(self.assignments[i])
@@ -253,6 +252,5 @@ class densityBasedClustering:
 			if self.assignments[i]['assignment'] == 'centroid_0':
 				noise.append(self.assignments[i])
 		return noise
-
 		
 # algorithm 3:
