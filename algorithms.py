@@ -61,7 +61,7 @@ class Kmeans:
 			@centroid index: the index of the centroid, range from 1-K
 			@return: stars in the index_th cluster
 		'''
-		key = 'centroid_' + str(centroidIdx)
+		key = 'centroid_' + str(centroidIdx+1)
 		cluster = []
 		for i in range(len(self.assignments)):
 			if self.assignments[i]['assignment'] == key:
@@ -217,7 +217,6 @@ class densityBasedClustering:
 
 		db = DBSCAN(eps = self.Eps, min_samples = self.minDist).fit(distMatrix)
 		belongs = db.labels_.tolist()
-		print belongs
 		for i in range(len(belongs)):
 			self.assignments[i]['assignment'] = 'centroid_' + str(belongs[i]+1)
 		self.numOfClusters = len(set(belongs)) - (1 if -1 in belongs else 0)
