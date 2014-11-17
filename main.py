@@ -96,6 +96,14 @@ class clusteringApplication(QWidget):
 			self.ui.parameterWidget.setItem(0,0, QTableWidgetItem('Bright_th'))
 			self.ui.parameterWidget.setItem(1,0, QTableWidgetItem('Eps'))
 			self.ui.parameterWidget.setItem(2,0, QTableWidgetItem('minDist'))
+
+		elif self.ui.algorithmBox.currentText() == 'Hierachical':
+			self.ui.parameterWidget.clearContents()
+			self.ui.clusteringResults.clear()
+
+		elif self.ui.algorithmBox.currentText() == 'Spectral':
+			self.ui.parameterWidget.clearContents()
+			self.ui.clusteringResults.clear()
 		return
 
 	def _clearAll(self):
