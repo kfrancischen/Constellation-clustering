@@ -7,8 +7,13 @@ import dataProcessing
 import algorithms
 import visualization
 
+# this class is for the user interface of the software
 class clusteringApplication(QWidget):
+	
 	def __init__(self):
+		'''
+			Initializing the ui
+		'''
 		super(clusteringApplication, self).__init__()
 		
 		self.ui = Ui_Widget()
@@ -20,11 +25,17 @@ class clusteringApplication(QWidget):
 		self.assignments = []
 
 	def addItemToAlgorithmbox(self):
+		'''
+			add algorithms to the combobox
+		'''
 		self.ui.algorithmBox.addItems(self.algorithmList)
 		self.ui.algorithmBox.activated.connect(self._setParameterTable)
 		return
 
 	def addContentsToParameterTable(self):
+		'''
+			add contents to the parameters table
+		'''
 		self.ui.parameterWidget.setHorizontalHeaderItem(0, QTableWidgetItem('Parameter'))
 		self.ui.parameterWidget.setHorizontalHeaderItem(1, QTableWidgetItem('Value'))
 		self.ui.parameterWidget.verticalHeader().setVisible(False)
@@ -32,27 +43,46 @@ class clusteringApplication(QWidget):
 		self.ui.parameterWidget.resizeColumnsToContents()
 		self.ui.parameterWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
 		return
+
 	def addReadOnlyToClusteringResults(self):
+		'''
+			add constraints to the plain text edit
+		'''
 		#self.ui.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
 		self.ui.clusteringResults.setReadOnly(True)
 
 	def addActionToRunButton(self):
+		'''
+			add action to the run button
+		'''
 		self.ui.runButton.clicked.connect(self._run_algorithms)
 		return
 
 	def addActionToVisualButtom(self):
+		'''
+			add action to the visualizing button
+		'''
 		self.ui.visualButton.clicked.connect(self._visualization)
 		return
 
 	def addActionToSaveButton(self):
+		'''
+			add action to the save button
+		'''
+		
 		return
 
 	def addActionToClearButton(self):
+		'''
+			add action to the clear button'
+		'''
 		self.ui.clearButton.clicked.connect(self._clearAll)
 		return	
 
 	def _setParameterTable(self):
-
+		'''
+			the action of changing parameter table contents according to the combobox
+		'''
 		if self.ui.algorithmBox.currentText() == 'K-means':
 			self.ui.parameterWidget.clearContents()
 			self.ui.clusteringResults.clear()
@@ -68,54 +98,72 @@ class clusteringApplication(QWidget):
 		return
 
 	def _clearAll(self):
+		'''
+			the action of clear button
+		'''
 		self.ui.algorithmBox.setCurrentIndex(0)
 		self.ui.parameterWidget.clearContents()
 		self.ui.clusteringResults.clear()
 
-	def _visualization(self):
+	def _visualization(self): 
+		'''
+			the action of visualizing button
+		'''
 		visualization.visualize(self.assignments)	
 
 	def _run_algorithms(self):
+		'''
+			The action of run button
+		'''
 		if self.ui.algorithmBox.currentText() == 'K-means':
-			bright_th = self.ui.parameterWidget.item(0,1).text()
+		 	# if running K-means algorithm
+
+			bright_th = float(self.ui.parameterWidget.item(0,1).text())
 			K = int(self.ui.parameterWidget.item(1,1).text())
 			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th) 
+			print len(starsNeedClustering)
 			standardKmeans = algorithms.Kmeans(starsNeedClustering, K)
 			standardKmeans.randInitCentroid()
 			standardKmeans.runStandardKmeansWithoutIter()
-			self.ui.clusteringResults.setPlainText('Algorithm finised. '+ str(K)+ ' Clusters found!\n\nPress "visualizing" to see the 3D results.\n\nClusters are shown below.\n')
+			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(K)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			self.ui.clusteringResults.appendPlainText('# The overall cosine dissimilarity is ' + str(standardKmeans.getDissimilarity()))
 			for i in range(K):
 				self.ui.clusteringResults.appendPlainText('\n**************************************')
-				self.ui.clusteringResults.appendPlainText('Stars belong to cluster'+str(i+1)+':\n')
+				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
 				cluster = standardKmeans.getCluster(i)
 				for idx in range(len(cluster)):
-					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightess] ' + str(cluster[idx]['brightness']))
+					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
 			self.assignments = standardKmeans.assignments
 #			visualization.visualize(standardKmeans.assignments)
 
 		elif self.ui.algorithmBox.currentText() == 'DBSCAN':
-			bright_th = self.ui.parameterWidget.item(0,1).text()
-			Eps = self.ui.parameterWidget.item(1,1).text()
+			# if running DBSCAN algorithm
+
+			bright_th = float(self.ui.parameterWidget.item(0,1).text())
+			Eps = float(self.ui.parameterWidget.item(1,1).text())
 			minDist = int(self.ui.parameterWidget.item(2,1).text())
-			#print Eps, minDist
 			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th)
 			standardDBS = algorithms.densityBasedClustering(starsNeedClustering, Eps, minDist) 
 			standardDBS.runDBA()
-			self.ui.clusteringResults.setPlainText('Algorithm finised. '+ str(standardDBS.numOfClusters)+ ' Clusters found!\n\nPress "visualizing" to see the 3D results.\n\nClusters are shown below.\n')
+			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(standardDBS.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			noise = standardDBS.getNoise()
+			self.ui.clusteringResults.appendPlainText('\n**************************************')
+			self.ui.clusteringResults.appendPlainText('Stars that are detected as noises:\n')
+			# output noise
+			for idx in range(len(noise)):
+				self.ui.clusteringResults.appendPlainText('[name] '+noise[idx]['name']+',   [Brightness] ' + str(noise[idx]['brightness']))
+			# output clusters
 			for i in range(standardDBS.numOfClusters):
 				self.ui.clusteringResults.appendPlainText('\n**************************************')
-				if i == 0:
-					self.ui.clusteringResults.appendPlainText('Noised detected by DBSCAN are:\n')
-				else:
-					self.ui.clusteringResults.appendPlainText('Stars belong to cluster'+str(i+1)+':\n')
+				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
 				cluster = standardDBS.getCluster(i)
 				for idx in range(len(cluster)):
-					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightess] ' + str(cluster[idx]['brightness']))
+					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
 #			visualization.visualize(standardDBS.assignments)
 			self.assignments = standardDBS.assignments
 			
 
-
+# create instances
 app = QApplication(sys.argv)
 interface = clusteringApplication()
 interface.addItemToAlgorithmbox()
