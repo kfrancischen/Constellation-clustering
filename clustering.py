@@ -58,6 +58,7 @@ if args.algorithm == 'Kmeans':
 elif args.algorithm == 'DBSCAN':
 	Eps = args.Eps
 	minDist = args.minDist
+	#print Eps, minDist, len(starsNeedClustering)
 	standardDBS = algorithms.densityBasedClustering(starsNeedClustering, Eps, minDist) 
 	standardDBS.runDBA()
 	print standardDBS.getNumOfClusters()
