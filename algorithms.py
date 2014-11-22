@@ -294,4 +294,44 @@ class aggolomerativeClustering:
 				cluster.append(self.assignments[i])
 		return cluster
 
-# algorithm 4: Spectrual clustering
+# algorithm 4: Spectral clustering
+
+from sklearn.cluster import SpectralClustering
+import pyamg
+class spectralClustering:
+	'''
+		This class will taked all the fitered data and perform spectral clustering
+	'''
+	def __init__(self, stars, n_clusters):
+		'''
+			 This function will initialize the class
+			 @n_clusters: number of clusters
+		'''
+		self.n_clusters = n_clusters
+		self.assignments = copy.deepcopy(stars)
+		self.coordinates = []
+		for i in range(len(self.assignments)):
+			coordinate = [self.assignments[i]['x_coor'], self.assignments[i]['y_coor'], self.assignments[i]['z_coor']]
+			self.coordinates.append(coordinate)
+
+	def runSpectralClustering(self):
+		'''
+			This function runs the spectral clustering algorithm
+		'''
+		distMatrix = distance.squareform(distance.pdist(self.coordinates, 'cosine'))
+		model = SpectralClustering(n_clusters = self.n_clusters, eigen_solver = 'arpack').fit(distMatrix)
+		belongs = model.labels_.tolist()
+		for i in range(len(belongs)):
+			self.assignments[i]['assignment'] = 'centroid_' + str(belongs[i] + 1)
+	
+	def getCluster(self, clusterIdx):
+		'''
+			This function outputs stars belonging to clusterIdx
+		'''
+		cluster = []
+		key = 'centroid_' + str(clusterIdx + 1)
+		for i in range(len(self.assignments)):
+			if self.assignments[i]['assignment'] == key:
+				cluster.append(self.assignments[i])
+		return cluster
+
