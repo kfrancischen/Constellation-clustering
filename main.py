@@ -100,6 +100,8 @@ class clusteringApplication(QWidget):
 		elif self.ui.algorithmBox.currentText() == 'Hierachical':
 			self.ui.parameterWidget.clearContents()
 			self.ui.clusteringResults.clear()
+			self.ui.parameterWidget.setItem(0,0, QTableWidgetItem('Bright_th'))
+			self.ui.parameterWidget.setItem(1,0, QTableWidgetItem('n_cluster'))
 
 		elif self.ui.algorithmBox.currentText() == 'Spectral':
 			self.ui.parameterWidget.clearContents()
@@ -186,6 +188,27 @@ class clusteringApplication(QWidget):
 					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
 #			visualization.visualize(standardDBS.assignments)
 			self.assignments = standardDBS.assignments
+
+		elif self.ui.algorithmBox.currentText() == 'Hierachical':
+			# if running Hierachical clustering
+
+			bright_th = float(self.ui.parameterWidget.item(0,1).text())
+			n_cluster = int(self.ui.parameterWidget.item(1,1).text())
+			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th)
+			standardHC = algorithms.aggolomerativeClustering(starsNeedClustering, n_cluster)
+			standardHC.runHierachicalClustering()
+			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(n_cluster)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			for i in range(n_cluster):
+				self.ui.clusteringResults.appendPlainText('\n**************************************')
+				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
+				cluster = standardHC.getCluster(i)
+				for idx in range(len(cluster)):
+					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
+			self.assignments = standardHC.assignments
+
+		elif self.ui.algorithmBox.currentText() == 'Spectral':
+			raise Exception('Not implemented yet')
+						
 			
 		return
 
