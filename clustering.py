@@ -31,6 +31,12 @@ minDist_parser.add_argument('minDist', type = int, help = 'the value of minimum 
 '''
 HC_parser = algorithm.add_parser('n', help = 'the number of clusters in Hierachical Clustering')
 HC_parser.add_argument('N', type = int, help = 'the value of n')
+'''
+	Running Spectral Clustering
+	python clustering.py -a spectral n [the n value]
+'''
+spectral_parser = algorithm.add_parser('n', help = 'the number of clusters in spectral clustering')
+spectral_parser.add_argument('N', type = int, help = 'the value of n')
 
 '''
 	adding all the parsers
@@ -83,3 +89,15 @@ elif args.algorithm == 'HC':
 	standardHC = algorithms.aggolomerativeClustering(starsNeedClustering, n_cluster)
 	standardHC.runHierachicalClustering()
 	visualization.visualize(standardHC.assignments)
+
+# if the user runs spectral clustering
+elif args.algorithm == 'spectral':
+	n_cluster = args.N
+	standardSpectralClustering = algorithms.spectralClustering(starsNeedClustering, n_cluster)
+	standardSpectralClustering.runSpectralClustering()
+	visualization.visualize(standardSpectralClustering.assignments)
+
+# if no such algorithm
+else:
+	raise Exception('No Such Bult-in Algorithm')
+
