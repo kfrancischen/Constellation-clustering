@@ -253,4 +253,45 @@ class densityBasedClustering:
 				noise.append(self.assignments[i])
 		return noise
 		
-# algorithm 3:
+# algorithm 3: Hierachical Clustering
+
+from sklearn.cluster import AgglomerativeClustering
+class aggolomerativeClustering:
+	'''
+		This class will take all the filtered data and perform Hierachical Clustering.
+		Here we use the Agglomerative Clustering algorithm
+	'''
+	def __init__(self, stars, n_clusters):
+		'''
+			This function will initialize the class
+			@n_clusters: number of clusters
+		'''
+		self.n_clusters = n_clusters
+		self.assignments = copy.deepcopy(stars)
+		self.coordinates = []
+		for i in range(len(self.assignments)):
+			coordinate = [self.assignments[i]['x_coor'], self.assignments[i]['y_coor'], self.assignments[i]['z_coor']]
+			self.coordinates.append(coordinate)
+
+	def runHierachicalClustering(self):
+		'''
+			This function runs the HC algorithm
+		'''
+		distMatrix = distance.squareform(distance.pdist(self.coordinates, 'cosine'))
+		model = AgglomerativeClustering(self.n_clusters, linkage = 'average', affinity = 'cosine').fit(distMatrix)
+		belongs = model.labels_.tolist()
+		for i in range(len(belongs)):
+			self.assignments[i]['assignment'] = 'centroid_' + str(belongs[i] + 1)
+	
+	def getCluster(self, clusterIdx):
+		'''
+			This function outputs stars belonging to clusterIdx
+		'''
+		cluster = []
+		key = 'centroid_' + str(clusterIdx + 1)
+		for i in range(len(self.assignments)):
+			if self.assignments[i]['assignment'] == key:
+				cluster.append(self.assignments[i])
+		return cluster
+
+# algorithm 4: Spectrual clustering
