@@ -85,12 +85,18 @@ class clusteringApplication(QWidget):
 			the action of changing parameter table contents according to the combobox
 		'''
 		if self.ui.algorithmBox.currentText() == 'K-means':
+		 	'''
+		 		Set up kmeans
+			'''
 			self.ui.parameterWidget.clearContents()
 			self.ui.clusteringResults.clear()
 			self.ui.parameterWidget.setItem(0,0, QTableWidgetItem('Bright_th'))
 			self.ui.parameterWidget.setItem(1,0, QTableWidgetItem('K'))	
 
 		elif self.ui.algorithmBox.currentText() == 'DBSCAN':
+			'''
+				set up DBSCAN
+			'''
 			self.ui.parameterWidget.clearContents()
 			self.ui.clusteringResults.clear()
 			self.ui.parameterWidget.setItem(0,0, QTableWidgetItem('Bright_th'))
@@ -98,14 +104,22 @@ class clusteringApplication(QWidget):
 			self.ui.parameterWidget.setItem(2,0, QTableWidgetItem('minDist'))
 
 		elif self.ui.algorithmBox.currentText() == 'Hierachical':
+			'''
+				set up hierachical clustering
+			'''
 			self.ui.parameterWidget.clearContents()
 			self.ui.clusteringResults.clear()
 			self.ui.parameterWidget.setItem(0,0, QTableWidgetItem('Bright_th'))
 			self.ui.parameterWidget.setItem(1,0, QTableWidgetItem('n_cluster'))
 
 		elif self.ui.algorithmBox.currentText() == 'Spectral':
+			'''
+				set up spectral clustering
+			'''
 			self.ui.parameterWidget.clearContents()
 			self.ui.clusteringResults.clear()
+			self.ui.parameterWidget.setItem(0,0, QTableWidgetItem('Bright_th'))
+			self.ui.parameterWidget.setItem(1,0, QTableWidgetItem('n_cluster'))
 		return
 
 	def _clearAll(self):
@@ -161,7 +175,6 @@ class clusteringApplication(QWidget):
 				for idx in range(len(cluster)):
 					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
 			self.assignments = standardKmeans.assignments
-#			visualization.visualize(standardKmeans.assignments)
 
 		elif self.ui.algorithmBox.currentText() == 'DBSCAN':
 			# if running DBSCAN algorithm
@@ -186,7 +199,6 @@ class clusteringApplication(QWidget):
 				cluster = standardDBS.getCluster(i)
 				for idx in range(len(cluster)):
 					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
-#			visualization.visualize(standardDBS.assignments)
 			self.assignments = standardDBS.assignments
 
 		elif self.ui.algorithmBox.currentText() == 'Hierachical':
@@ -207,8 +219,21 @@ class clusteringApplication(QWidget):
 			self.assignments = standardHC.assignments
 
 		elif self.ui.algorithmBox.currentText() == 'Spectral':
-			raise Exception('Not implemented yet')
-						
+			# if running spectral clustering
+
+			bright_th = float(self.ui.parameterWidget.item(0,1).text())
+			n_cluster = int(self.ui.parameterWidget.item(1,1).text())
+			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th)
+			standardSpectralClustering = algorithms.spectralClustering(starsNeedClustering, n_cluster)
+			standardSpectralClustering.runSpectralClustering()
+			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(n_cluster)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			for i in range(n_cluster):
+				self.ui.clusteringResults.appendPlainText('\n**************************************')
+				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
+				cluster = standardSpectralClustering.getCluster(i)
+				for idx in range(len(cluster)):
+					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
+			self.assignments = standardSpectralClustering.assignments	
 			
 		return
 
