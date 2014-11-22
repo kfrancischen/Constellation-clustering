@@ -28,6 +28,10 @@ Running **Hierachical Clustering**:
 ```shellscript
   python clustering.py -a HC n [the n value]
 ```
+Running **Spectral Clustering**:
+```shellscript
+  python clustering.py -a spectral n [the n value]
+```
 #### Running GUI Version:
 ```shellscript
   python main.py
