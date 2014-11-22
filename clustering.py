@@ -24,6 +24,17 @@ eps_parser.add_argument('Eps', type = float, help = 'the input epsilon')
 min_dist = eps_parser.add_subparsers(help = 'the minimum distance')
 minDist_parser = min_dist.add_parser('mindist', help = 'minimum distance for a reachable point')
 minDist_parser.add_argument('minDist', type = int, help = 'the value of minimum distance')
+
+'''
+	Running Hierachical Clustering
+	python clustering.py -a HC n [the n value]
+'''
+HC_parser = algorithm.add_parser('n', help = 'the number of clusters in Hierachical Clustering')
+HC_parser.add_argument('N', type = int, help = 'the value of n')
+
+'''
+	adding all the parsers
+'''
 args = parser.parse_args()
 
 
@@ -36,7 +47,7 @@ starsWithName = dataProcessing.chooseStarWithName(database)
 
 # choosing the stars with brighness higher than 4.5
 starsNeedClustering = dataProcessing.selectBrightness(starsWithName, 4.6)
-print len(starsNeedClustering)
+# print len(starsNeedClustering)
 # if the user runs kmeans 
 if args.algorithm == 'Kmeans':
 	K = args.K
@@ -61,10 +72,14 @@ elif args.algorithm == 'DBSCAN':
 	#print Eps, minDist, len(starsNeedClustering)
 	standardDBS = algorithms.densityBasedClustering(starsNeedClustering, Eps, minDist) 
 	standardDBS.runDBA()
-	print standardDBS.getNumOfClusters()
+	#print standardDBS.getNumOfClusters()
 	noise = standardDBS.getNoise()
-	print 'Number of noise stars: ', len(noise)
+	#print 'Number of noise stars: ', len(noise)
 	visualization.visualize(standardDBS.assignments)
-	
 
-
+# if the user runs Hierachical Clustering
+elif args.algorithm == 'HC':
+	n_cluster = args.N
+	standardHC = algorithms.aggolomerativeClustering(starsNeedClustering, n_cluster)
+	standardHC.runHierachicalClustering()
+	visualization.visualize(standardHC.assignments)
