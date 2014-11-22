@@ -24,6 +24,10 @@ Running **DBSCAN**:
 ```shellscript
   python clustering.py -a DBSCAN eps [the eps value] mindist [the mindist value]
 ```
+Running **Hierachical Clustering**:
+```shellscript
+  python clustering.py -a HC n [the n value]
+```
 #### Running GUI Version:
 ```shellscript
   python main.py
