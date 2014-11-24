@@ -363,3 +363,63 @@ class spectralClustering:
 				cluster.append(self.assignments[i])
 		return cluster
 
+from sklearn.cluster import AffinityPropagation
+class affinityPropagation:
+	'''
+		This class will take all the fitered data and perform affinity propagation algorithm
+	'''
+	def __init__(self, stars, damping, max_iter):
+		'''
+			This function will initialize the class
+			@damping: damping factor between 0.5 and 1.
+			@max_iter: maximum number of iterations
+		'''
+		self.assignments = copy.deepcopy(stars)
+		self.damping = damping
+		self.max_iter = max_iter
+		self.coordinates = []
+		self.center_id = []
+		for i in range(len(self.assignments)):
+			coordinate = [self.assignments[i]['x_coor'], self.assignments[i]['y_coor'], self.assignments[i]['z_coor']]
+			self.coordinates.append(coordinate)
+
+	def runAffinityPropagation(self):
+		'''
+			This function runs the affinity propagation algorithm
+		'''
+		distMatrix = distance.squareform(distance.pdist(self.coordinates, 'cosine'))
+		model = AffinityPropagation(damping = self.damping, max_iter = self.max_iter,affinity = 'precomputed')
+		model.fit(distMatrix)
+		self.center_id = model.cluster_centers_indices_.tolist()
+		belongs = model.labels_.tolist()
+		for i in range(len(belongs)):
+			self.assignments[i]['assignment'] = 'centroid_' + str(belongs[i] + 1)
+	
+	def getNumOfClusters(self):
+		'''
+			This function will return the number of clusters
+		'''
+		return len(self.center_id)
+
+	def getCenters(self):
+		'''
+			This function will return the center of the results
+		'''
+		center = []
+		for i in range(len(self.center_id)):
+			center.append(self.assignments[i])
+		return center
+
+	def getCluster(self, clusterIdx):
+		'''
+			This function outputs stars belonging to clusterIdx
+		'''
+		cluster = []
+		key = 'centroid_' + str(clusterIdx + 1)
+		for i in range(len(self.assignments)):
+			if self.assignments[i]['assignment'] == key:
+				cluster.append(self.assignments[i])
+		return cluster
+
+
+
