@@ -129,7 +129,16 @@ class clusteringApplication(QWidget):
 			self.ui.clusteringResults.clear()
 			self.ui.parameterWidget.setItem(0,0, QTableWidgetItem('Bright_th'))
 			self.ui.parameterWidget.setItem(1,0, QTableWidgetItem('n_cluster'))
-		return
+
+		elif self.ui.algorithmBox.currentText() == 'Affinity':
+			'''
+				set up affinity propagation
+			'''
+			self.ui.parameterWidget.clearContents()
+			self.ui.clusteringResults.clear()
+			self.ui.parameterWidget.setItem(0,0, QTableWidgetItem('Bright_th'))
+			self.ui.parameterWidget.setItem(1,0, QTableWidgetItem('damping'))
+			self.ui.parameterWidget.setItem(2,0, QTableWidgetItem('max_iter'))
 
 	def _clearAll(self):
 		'''
@@ -258,7 +267,29 @@ class clusteringApplication(QWidget):
 				cluster = standardSpectralClustering.getCluster(i)
 				for idx in range(len(cluster)):
 					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
-			self.assignments = standardSpectralClustering.assignments	
+			self.assignments = standardSpectralClustering.assignments
+
+		elif self.ui.algorithmBox.currentText() == 'Affinity':
+			# if running affinity propagation
+
+			bright_th = float(self.ui.parameterWidget.item(0,1).text())
+			damping = float(self.ui.parameterWidget.item(1,1).text())
+			max_iter = int(self.ui.parameterWidget.item(2,1).text())
+			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th)
+			standardAP = algorithms.affinityPropagation(starsNeedClustering, damping, max_iter)
+			standardAP.runAffinityPropagation()
+			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(standardAP.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			self.ui.clusteringResults.appendPlainText('# The overall cosine dissimilarity is ' + str(standardAP.getDissimilarity()))
+			centers = standardAP.getCenters()
+			for i in range(standardAP.getNumOfClusters()):
+				self.ui.clusteringResults.appendPlainText('\n**************************************')
+				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
+				self.ui.clusteringResults.appendPlainText('The center of this cluster: ' + str(centers[i]['name'])+'\n')
+				cluster = standardAP.getCluster(i)
+				for idx in range(len(cluster)):
+					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
+			self.assignments = standardAP.assignments
+			
 			
 		return
 
