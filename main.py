@@ -7,6 +7,7 @@ import dataProcessing
 import algorithms
 import visualization
 import os
+import numpy
 
 # this class is for the user interface of the software
 class clusteringApplication(QWidget):
@@ -19,7 +20,7 @@ class clusteringApplication(QWidget):
 		
 		self.ui = Ui_Widget()
 		self.ui.setupUi(self)
-		self.algorithmList = ['','K-means','DBSCAN','Hierachical','Spectral']
+		self.algorithmList = ['','K-means','DBSCAN','Hierachical','Hierachical_2','Spectral', 'Affinity']
 		self.database = dataProcessing.readJson()
 		self.database = dataProcessing.transformCoordinate(self.database)
 		self.starsWithName = dataProcessing.chooseStarWithName(self.database)	
@@ -112,6 +113,14 @@ class clusteringApplication(QWidget):
 			self.ui.parameterWidget.setItem(0,0, QTableWidgetItem('Bright_th'))
 			self.ui.parameterWidget.setItem(1,0, QTableWidgetItem('n_cluster'))
 
+		elif self.ui.algorithmBox.currentText() == 'Hierachical_2':
+			'''
+				set up hierachical cluster_2
+			'''
+			self.ui.parameterWidget.clearContents()
+			self.ui.clusteringResults.clear()
+			self.ui.parameterWidget.setItem(0,0, QTableWidgetItem('Bright_th'))
+
 		elif self.ui.algorithmBox.currentText() == 'Spectral':
 			'''
 				set up spectral clustering
@@ -135,7 +144,12 @@ class clusteringApplication(QWidget):
 		'''
 			the action of visualizing button
 		'''
-		visualization.visualize(self.assignments)	
+		if self.ui.algorithmBox.currentText() != 'Hierachical_2':
+
+			visualization.visualize(self.assignments)	
+		else:
+			visualization.drawDendrogram(self.linkMatrix)
+
 		return
 
 	def _savedata(self):
@@ -202,7 +216,7 @@ class clusteringApplication(QWidget):
 			self.assignments = standardDBS.assignments
 
 		elif self.ui.algorithmBox.currentText() == 'Hierachical':
-			# if running Hierachical clustering
+			# if running Hierarchical clustering
 
 			bright_th = float(self.ui.parameterWidget.item(0,1).text())
 			n_cluster = int(self.ui.parameterWidget.item(1,1).text())
@@ -217,6 +231,17 @@ class clusteringApplication(QWidget):
 				for idx in range(len(cluster)):
 					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
 			self.assignments = standardHC.assignments
+
+		elif self.ui.algorithmBox.currentText() == 'Hierachical_2':
+			# if running Hierarchical clustering_2	
+			
+			bright_th = float(self.ui.parameterWidget.item(0,1).text())
+			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th)
+			HC_2 = algorithms.hierarchicalClustering(starsNeedClustering)
+			HC_2.runHC_Version_2()
+			self.ui.clusteringResults.setPlainText('# Algorithm finised. \n\n# Press "visualizing" to see the hierarchical trees.\n')
+			self.linkMatrix = HC_2.linkMatrix;
+				
 
 		elif self.ui.algorithmBox.currentText() == 'Spectral':
 			# if running spectral clustering
