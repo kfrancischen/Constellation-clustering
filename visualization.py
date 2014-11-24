@@ -31,5 +31,6 @@ def drawDendrogram(linkMatrix):
 	ax = fig.add_subplot(111)
 	tree = hac.dendrogram(linkMatrix)
 	ax.set_yticks([])
+
 	plt.show()
 
