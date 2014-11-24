@@ -407,7 +407,7 @@ class affinityPropagation:
 		'''
 		center = []
 		for i in range(len(self.center_id)):
-			center.append(self.assignments[i])
+			center.append(self.assignments[self.center_id[i]])
 		return center
 
 	def getCluster(self, clusterIdx):
@@ -420,6 +420,18 @@ class affinityPropagation:
 			if self.assignments[i]['assignment'] == key:
 				cluster.append(self.assignments[i])
 		return cluster
+
+	def getDissimilarity(self):
+		'''
+			This function will return the dissimilarity of the centers and the originial data
+		'''
+		dissimilarity = 0
+		for idx in range(len(self.assignments)):
+			star = self.assignments[idx]
+			belong = int(star['assignment'][-1])-1
+			dissimilarity += basicFun.cosDissimilarity([star['x_coor'], star['y_coor'], star['z_coor']], \
+					[self.assignments[self.center_id[belong]]['x_coor'], self.assignments[self.center_id[belong]]['y_coor'], self.assignments[self.center_id[belong]]['z_coor']])
+		return dissimilarity
 
 
 
