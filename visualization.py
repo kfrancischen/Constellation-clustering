@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import math
+import scipy.cluster.hierarchy as hac
 
 def visualize(assignments):
 	xs = []
@@ -24,3 +25,11 @@ def visualize(assignments):
 	ax.set_zlabel('Z Axis')
 
 	plt.show()
+
+def drawDendrogram(linkMatrix):
+	fig = plt.figure()
+	ax = fig.add_subplot(111)
+	tree = hac.dendrogram(linkMatrix)
+	ax.set_yticks([])
+	plt.show()
+
