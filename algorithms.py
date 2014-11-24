@@ -253,7 +253,7 @@ class densityBasedClustering:
 				noise.append(self.assignments[i])
 		return noise
 		
-# algorithm 3: Hierachical Clustering
+# algorithm 3: Hierarchical Clustering
 
 from sklearn.cluster import AgglomerativeClustering
 class aggolomerativeClustering:
@@ -293,6 +293,34 @@ class aggolomerativeClustering:
 			if self.assignments[i]['assignment'] == key:
 				cluster.append(self.assignments[i])
 		return cluster
+
+# algorithm 3-1: Hierarchical Clustering from scipy
+import scipy.cluster.hierarchy as hac
+import pylab
+
+class hierarchicalClustering:
+	'''
+		This class will use scipy to draw the tree structure
+	'''
+	def __init__(self, stars):
+		'''
+			initializing the class
+		'''
+		self.assignments = copy.deepcopy(stars)
+		self.coordinates = []
+		self.linkMatrix = numpy.empty([len(self.assignments) - 1,4])
+		for i in range(len(self.assignments)):
+			coordinate = [self.assignments[i]['x_coor'], self.assignments[i]['y_coor'], self.assignments[i]['z_coor']]
+			self.coordinates.append(coordinate)
+	
+	def runHC_Version_2(self):
+		'''
+			generate linkmatrix
+		'''
+		distMatrix = distance.squareform(distance.pdist(self.coordinates, 'cosine'))
+		linkMatrix = hac.linkage(distMatrix, method = 'average')
+		self.linkMatrix = linkMatrix
+#		tree = hac.dendrogram(linkMatrix)
 
 # algorithm 4: Spectral clustering
 
