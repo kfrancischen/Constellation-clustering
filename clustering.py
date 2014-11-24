@@ -45,7 +45,15 @@ HC_2_parser.add_argument('n', type = int, help = 'the second HC algorithm')
 '''
 spectral_parser = algorithm.add_parser('n', help = 'the number of clusters in spectral clustering')
 spectral_parser.add_argument('N', type = int, help = 'the value of n')
-
+'''
+	Running affinity propagation
+	python clustering.py -a affinity d [the damping value] mi [value of max_iter]
+'''
+damping_parser = algorithm.add_parser('d', help = 'the damping factor')
+damping_parser.add_argument('D', type = float, help ='the value of d')
+MI = damping_parser.add_subparsers(help = 'the mi parser')
+mi_parser = MI.add_parser('mi', help = 'the max_iter')
+mi_parser.add_argument('MI', type = int, help = 'the value of mi')
 '''
 	adding all the parsers
 '''
@@ -60,7 +68,7 @@ database = dataProcessing.transformCoordinate(database)
 starsWithName = dataProcessing.chooseStarWithName(database)
 
 # choosing the stars with brighness higher than 4.5
-starsNeedClustering = dataProcessing.selectBrightness(starsWithName, 2)
+starsNeedClustering = dataProcessing.selectBrightness(starsWithName, 4.6)
 #print len(starsNeedClustering)
 # if the user runs kmeans 
 if args.algorithm == 'Kmeans':
@@ -110,6 +118,14 @@ elif args.algorithm == 'spectral':
 	standardSpectralClustering = algorithms.spectralClustering(starsNeedClustering, n_cluster)
 	standardSpectralClustering.runSpectralClustering()
 	visualization.visualize(standardSpectralClustering.assignments)
+
+# if the user runs affinity propagation
+elif args.algorithm == 'affinity':
+	damping = args.D
+	max_iter = args.MI
+	standardAP = algorithms.affinityPropagation(starsNeedClustering, damping, max_iter)
+	standardAP.runAffinityPropagation()
+	visualization.visualize(standardAP.assignments)
 
 # if no such algorithm
 else:
