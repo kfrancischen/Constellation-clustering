@@ -28,6 +28,14 @@ Running **Hierachical Clustering**:
 ```shellscript
   python clustering.py -a HC n [the n value]
 ```
+Running **Hierachical Clustering** (2nd version) to get the dendrogram:
+```shellscript
+  python clustering.py -a HC_2 default 2
+```
+Running **Affinity Propagation**:
+```shellscript
+  python clustering.py -a affinity d [the damping factor] mi [the max_iter value]
+```
 Running **Spectral Clustering**:
 ```shellscript
   python clustering.py -a spectral n [the n value]
