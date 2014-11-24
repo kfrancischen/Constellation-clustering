@@ -26,11 +26,19 @@ minDist_parser = min_dist.add_parser('mindist', help = 'minimum distance for a r
 minDist_parser.add_argument('minDist', type = int, help = 'the value of minimum distance')
 
 '''
-	Running Hierachical Clustering
+	Running Hierarchical Clustering
 	python clustering.py -a HC n [the n value]
 '''
-HC_parser = algorithm.add_parser('n', help = 'the number of clusters in Hierachical Clustering')
+HC_parser = algorithm.add_parser('n', help = 'the number of clusters in Hierarchical Clustering')
 HC_parser.add_argument('N', type = int, help = 'the value of n')
+
+'''
+	Running Hierachical to get the dendrogram
+	python clustering.py -a HC_2
+'''
+HC_2_parser = algorithm.add_parser('default', help = 'no input arguments')
+HC_2_parser.add_argument('n', type = int, help = 'the second HC algorithm')
+
 '''
 	Running Spectral Clustering
 	python clustering.py -a spectral n [the n value]
@@ -52,8 +60,8 @@ database = dataProcessing.transformCoordinate(database)
 starsWithName = dataProcessing.chooseStarWithName(database)
 
 # choosing the stars with brighness higher than 4.5
-starsNeedClustering = dataProcessing.selectBrightness(starsWithName, 4.6)
-# print len(starsNeedClustering)
+starsNeedClustering = dataProcessing.selectBrightness(starsWithName, 2)
+#print len(starsNeedClustering)
 # if the user runs kmeans 
 if args.algorithm == 'Kmeans':
 	K = args.K
@@ -88,7 +96,13 @@ elif args.algorithm == 'HC':
 	n_cluster = args.N
 	standardHC = algorithms.aggolomerativeClustering(starsNeedClustering, n_cluster)
 	standardHC.runHierachicalClustering()
-	visualization.visualize(standardHC.assignments)
+	#visualization.visualize(standardHC.assignments)
+
+# if the user runs Hierachical Clustering_2
+elif args.algorithm == 'HC_2':
+	HC_version_2 = algorithms.hierarchicalClustering(starsNeedClustering)
+	HC_version_2.runHC_Version_2()
+	visualization.drawDendrogram(HC_version_2.linkMatrix)
 
 # if the user runs spectral clustering
 elif args.algorithm == 'spectral':
