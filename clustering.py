@@ -69,6 +69,11 @@ starsWithName = dataProcessing.chooseStarWithName(database)
 
 # choosing the stars with brighness higher than 4.5
 starsNeedClustering = dataProcessing.selectBrightness(starsWithName, 4.6)
+
+# get all the constellation names among the selected stars
+constellationNames = dataProcessing.getConstellationNames(starsNeedClustering)
+
+#print constellationNames, len(constellationNames)
 #print len(starsNeedClustering)
 # if the user runs kmeans 
 if args.algorithm == 'Kmeans':
