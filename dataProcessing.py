@@ -77,11 +77,9 @@ def getConstellationNames(data):
 	'''
 		This funcition will return all the constellation names
 	'''
-	constellationNames = []
+	constellationNames = {}
 	for index in range(len(data)):
-		constellationNames.append(data[index]['name'][-3:])
-
-	constellationNames = list(set(constellationNames))
+		constellationNames[data[index]['name'][-3:]] = 1
 	return constellationNames
 
 
