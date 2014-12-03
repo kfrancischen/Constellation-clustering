@@ -187,7 +187,7 @@ class clusteringApplication(QWidget):
 			bright_th = float(self.ui.parameterWidget.item(0,1).text())
 			K = int(self.ui.parameterWidget.item(1,1).text())
 			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th) 
-			constellationNames = dataProcessing.getConstellationNames(starsNeedClustering)
+			logScore = 0
 			standardKmeans = algorithms.Kmeans(starsNeedClustering, K)
 			standardKmeans.randInitCentroid()
 			standardKmeans.runStandardKmeansWithoutIter()
@@ -197,8 +197,13 @@ class clusteringApplication(QWidget):
 				self.ui.clusteringResults.appendPlainText('\n**************************************')
 				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
 				cluster = standardKmeans.getCluster(i)
+				names = []
 				for idx in range(len(cluster)):
 					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
+					names.append(cluster[idx]['name'][-3:])
+				if names != []:
+					logScore += numpy.log(len(list(set(names))))
+			self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardKmeans.assignments
 
 		elif self.ui.algorithmBox.currentText() == 'DBSCAN':
@@ -208,6 +213,7 @@ class clusteringApplication(QWidget):
 			Eps = float(self.ui.parameterWidget.item(1,1).text())
 			minDist = int(self.ui.parameterWidget.item(2,1).text())
 			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th)
+			logScore = 0
 			standardDBS = algorithms.densityBasedClustering(starsNeedClustering, Eps, minDist) 
 			standardDBS.runDBA()
 			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(standardDBS.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
@@ -222,8 +228,13 @@ class clusteringApplication(QWidget):
 				self.ui.clusteringResults.appendPlainText('\n**************************************')
 				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
 				cluster = standardDBS.getCluster(i)
+				names = []
 				for idx in range(len(cluster)):
 					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
+					names.append(cluster[idx]['name'][-3:])
+				if names != []:
+					logScore += numpy.log(len(list(set(names))))
+	#		self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardDBS.assignments
 
 		elif self.ui.algorithmBox.currentText() == 'Hierachical':
@@ -232,6 +243,7 @@ class clusteringApplication(QWidget):
 			bright_th = float(self.ui.parameterWidget.item(0,1).text())
 			n_cluster = int(self.ui.parameterWidget.item(1,1).text())
 			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th)
+			logScore = 0
 			standardHC = algorithms.aggolomerativeClustering(starsNeedClustering, n_cluster)
 			standardHC.runHierachicalClustering()
 			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(n_cluster)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
@@ -239,8 +251,13 @@ class clusteringApplication(QWidget):
 				self.ui.clusteringResults.appendPlainText('\n**************************************')
 				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
 				cluster = standardHC.getCluster(i)
+				names = []
 				for idx in range(len(cluster)):
 					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
+					names.append(cluster[idx]['name'][-3:])
+				if names != []:
+					logScore += numpy.log(len(list(set(names))))
+			self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardHC.assignments
 
 		elif self.ui.algorithmBox.currentText() == 'Hierachical_2':
@@ -260,6 +277,7 @@ class clusteringApplication(QWidget):
 			bright_th = float(self.ui.parameterWidget.item(0,1).text())
 			n_cluster = int(self.ui.parameterWidget.item(1,1).text())
 			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th)
+			logScore = 0
 			standardSpectralClustering = algorithms.spectralClustering(starsNeedClustering, n_cluster)
 			standardSpectralClustering.runSpectralClustering()
 			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(n_cluster)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
@@ -267,8 +285,13 @@ class clusteringApplication(QWidget):
 				self.ui.clusteringResults.appendPlainText('\n**************************************')
 				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
 				cluster = standardSpectralClustering.getCluster(i)
+				names = []
 				for idx in range(len(cluster)):
 					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
+					names.append(cluster[idx]['name'][-3:])
+				if names != []:
+					logScore += numpy.log(len(list(set(names))))
+			self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardSpectralClustering.assignments
 
 		elif self.ui.algorithmBox.currentText() == 'Affinity':
@@ -278,6 +301,7 @@ class clusteringApplication(QWidget):
 			damping = float(self.ui.parameterWidget.item(1,1).text())
 			max_iter = int(self.ui.parameterWidget.item(2,1).text())
 			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th)
+			logScore = 0
 			standardAP = algorithms.affinityPropagation(starsNeedClustering, damping, max_iter)
 			standardAP.runAffinityPropagation()
 			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(standardAP.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
@@ -288,8 +312,13 @@ class clusteringApplication(QWidget):
 				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
 				self.ui.clusteringResults.appendPlainText('The center of this cluster: ' + str(centers[i]['name'])+'\n')
 				cluster = standardAP.getCluster(i)
+				names = []
 				for idx in range(len(cluster)):
 					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
+					names.append(cluster[idx]['name'][-3:])
+				if names != []:
+					logScore += numpy.log(len(list(set(names))))
+		#	self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardAP.assignments
 			
 			
