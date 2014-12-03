@@ -5,6 +5,7 @@ from GUI import *
 import sys
 import dataProcessing
 import algorithms
+import basicFun
 import visualization
 import os
 import numpy
@@ -186,6 +187,7 @@ class clusteringApplication(QWidget):
 			bright_th = float(self.ui.parameterWidget.item(0,1).text())
 			K = int(self.ui.parameterWidget.item(1,1).text())
 			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th) 
+			constellationNames = dataProcessing.getConstellationNames(starsNeedClustering)
 			standardKmeans = algorithms.Kmeans(starsNeedClustering, K)
 			standardKmeans.randInitCentroid()
 			standardKmeans.runStandardKmeansWithoutIter()
