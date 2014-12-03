@@ -448,7 +448,7 @@ class roteClassification:
 			This function will initialize the class
 		'''
 		self.assignments = copy.deepcopy(stars)
-		self.constellationNames = constellationNames
+		self.constellationNames = constellationNames.keys()
 
 	def runRoteClassification(self):
 		'''
