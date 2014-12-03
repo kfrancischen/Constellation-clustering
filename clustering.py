@@ -55,6 +55,11 @@ MI = damping_parser.add_subparsers(help = 'the mi parser')
 mi_parser = MI.add_parser('mi', help = 'the max_iter')
 mi_parser.add_argument('MI', type = int, help = 'the value of mi')
 '''
+	Running rote classification
+'''
+rote_parser = algorithm.add_parser('default', help = 'no input arguments')
+rote_parser.add_argument('n', type = int, help = 'the rote classification')
+'''
 	adding all the parsers
 '''
 args = parser.parse_args()
@@ -112,7 +117,7 @@ elif args.algorithm == 'HC':
 	#visualization.visualize(standardHC.assignments)
 
 # if the user runs Hierachical Clustering_2
-elif args.algorithm == 'HC_2':
+elif args.algorithm == 'HC_2' and  args.n == 0:
 	HC_version_2 = algorithms.hierarchicalClustering(starsNeedClustering)
 	HC_version_2.runHC_Version_2()
 	visualization.drawDendrogram(HC_version_2.linkMatrix)
@@ -131,6 +136,12 @@ elif args.algorithm == 'affinity':
 	standardAP = algorithms.affinityPropagation(starsNeedClustering, damping, max_iter)
 	standardAP.runAffinityPropagation()
 	visualization.visualize(standardAP.assignments)
+
+# if the user runs the route classification
+elif args.algorithm == 'rote' and args.n == 1:
+	roteClassification = algorithms.roteClassification(starsNeedClustering, constellationNames)
+	roteClassification.runRoteClassification()
+	visualization.visualize(roteClassification.assignments)
 
 # if no such algorithm
 else:
