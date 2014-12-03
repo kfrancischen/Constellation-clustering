@@ -30,7 +30,7 @@ Running **Hierachical Clustering**:
 ```
 Running **Hierachical Clustering** (2nd version) to get the dendrogram:
 ```shellscript
-  python clustering.py -a HC_2 default 2
+  python clustering.py -a HC_2 default 0
 ```
 Running **Affinity Propagation**:
 ```shellscript
@@ -39,6 +39,10 @@ Running **Affinity Propagation**:
 Running **Spectral Clustering**:
 ```shellscript
   python clustering.py -a spectral n [the n value]
+```
+Running **Rote Classification**:
+```shellscript
+  python clustering.py -a rote default 1
 ```
 #### Running GUI Version:
 ```shellscript
