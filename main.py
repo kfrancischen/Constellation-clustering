@@ -21,7 +21,7 @@ class clusteringApplication(QWidget):
 		
 		self.ui = Ui_Widget()
 		self.ui.setupUi(self)
-		self.algorithmList = ['','K-means','DBSCAN','Hierachical','Hierachical_2','Spectral', 'Affinity']
+		self.algorithmList = ['','K-means','DBSCAN','Hierachical','Hierachical_2','Spectral', 'Affinity','Rote']
 		self.database = dataProcessing.readJson()
 		self.database = dataProcessing.transformCoordinate(self.database)
 		self.starsWithName = dataProcessing.chooseStarWithName(self.database)	
@@ -140,6 +140,14 @@ class clusteringApplication(QWidget):
 			self.ui.parameterWidget.setItem(0,0, QTableWidgetItem('Bright_th'))
 			self.ui.parameterWidget.setItem(1,0, QTableWidgetItem('damping'))
 			self.ui.parameterWidget.setItem(2,0, QTableWidgetItem('max_iter'))
+		
+		elif self.ui.algorithmBox.currentText() == 'Rote':
+			'''
+				set up rote classification
+			'''
+			self.ui.parameterWidget.clearContents()
+			self.ui.clusteringResults.clear()
+			self.ui.parameterWidget.setItem(0,0, QTableWidgetItem('Bright_th'))
 
 	def _clearAll(self):
 		'''
@@ -181,6 +189,7 @@ class clusteringApplication(QWidget):
 		'''
 			The action of run button
 		'''
+		#----------------------------------------------------------------------------------#
 		if self.ui.algorithmBox.currentText() == 'K-means':
 		 	# if running K-means algorithm
 
@@ -206,6 +215,7 @@ class clusteringApplication(QWidget):
 			self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardKmeans.assignments
 
+		#----------------------------------------------------------------------------------#
 		elif self.ui.algorithmBox.currentText() == 'DBSCAN':
 			# if running DBSCAN algorithm
 
@@ -237,6 +247,7 @@ class clusteringApplication(QWidget):
 	#		self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardDBS.assignments
 
+		#----------------------------------------------------------------------------------#
 		elif self.ui.algorithmBox.currentText() == 'Hierachical':
 			# if running Hierarchical clustering
 
@@ -260,6 +271,7 @@ class clusteringApplication(QWidget):
 			self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardHC.assignments
 
+		#----------------------------------------------------------------------------------#
 		elif self.ui.algorithmBox.currentText() == 'Hierachical_2':
 			# if running Hierarchical clustering_2	
 			
@@ -271,6 +283,7 @@ class clusteringApplication(QWidget):
 			self.linkMatrix = HC_2.linkMatrix;
 				
 
+		#----------------------------------------------------------------------------------#
 		elif self.ui.algorithmBox.currentText() == 'Spectral':
 			# if running spectral clustering
 
@@ -294,6 +307,7 @@ class clusteringApplication(QWidget):
 			self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardSpectralClustering.assignments
 
+		#----------------------------------------------------------------------------------#
 		elif self.ui.algorithmBox.currentText() == 'Affinity':
 			# if running affinity propagation
 
@@ -320,6 +334,30 @@ class clusteringApplication(QWidget):
 					logScore += numpy.log(len(list(set(names))))
 		#	self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardAP.assignments
+
+		#----------------------------------------------------------------------------------#
+		elif self.ui.algorithmBox.currentText() == 'Rote':
+			# if running rote classification
+
+			bright_th = float(self.ui.parameterWidget.item(0,1).text())
+			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th)
+			constellationNames = dataProcessing.getConstellationNames(starsNeedClustering)
+			logScore = 0
+			rote = algorithms.roteClassification(starsNeedClustering, constellationNames)
+			rote.runRoteClassification()
+			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(rote.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			for i in range(rote.getNumOfClusters()):
+				self.ui.clusteringResults.appendPlainText('\n**************************************')
+				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
+				cluster = rote.getCluster(i)
+				names = []
+				for idx in range(len(cluster)):
+					self.ui.clusteringResults.appendPlainText('[name] '+cluster[idx]['name']+',   [Brightness] ' + str(cluster[idx]['brightness']))
+					names.append(cluster[idx]['name'][-3:])
+				if names != []:
+					logScore += numpy.log(len(list(set(names))))
+			self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
+			self.assignments = rote.assignments
 			
 			
 		return
