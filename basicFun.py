@@ -52,3 +52,19 @@ def getNorm(a_list):
 	'''
 	return math.sqrt(a_list[0]**2 + a_list[1]**2 + a_list[2]**2)
 
+def getMisClassification(names, assignments):
+	'''
+		This function will compare the orginal names with the clustering results
+	'''
+	resultStatistics = {}
+	logScore = 1
+	for idx in range(len(names)):
+		resultStatistics[names[idx]] = 0
+	for idx in range(len(assignments)):
+		star = assignments[i]
+		resultStatistics[star['name'][-3:]] += 1
+	for key in resultStatistics.keys():
+		logScore *= resultStatistics[key]
+	logScore = math.exp(logScore)
+	return (resultStatistics, logScore)
+
