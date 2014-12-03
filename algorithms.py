@@ -363,6 +363,8 @@ class spectralClustering:
 				cluster.append(self.assignments[i])
 		return cluster
 
+# algorithm 5: affinity propagation
+
 from sklearn.cluster import AffinityPropagation
 class affinityPropagation:
 	'''
@@ -434,4 +436,44 @@ class affinityPropagation:
 		return dissimilarity
 
 
+# algorithm 6: rote classification
 
+class roteClassification:
+	'''
+		This class will do the rote classfication only based on the names of stars.
+		Therefore, the result wil always give the traditional clusters
+	'''
+	def __init__(self, stars, constellationNames):
+		'''
+			This function will initialize the class
+		'''
+		self.assignments = copy.deepcopy(stars)
+		self.constellationNames = constellationNames
+
+	def runRoteClassification(self):
+		'''
+			This function will run the rote classification
+		'''
+		for idx in range(len(self.assignments)):
+			for i in range(len(self.constellationNames)):
+				if self.assignments[idx]['name'][-3:] == self.constellationNames[i]:
+					key = 'centroid_' + str(i+1)
+					self.assignments[idx]['assignment'] = key
+					continue
+
+	def getNumOfClusters(self):
+		'''
+			This function will return the number of clusters
+		'''
+		return len(self.constellationNames)
+
+	def getCluster(self, clusterIdx):
+		'''
+			This function will output stars belonging to clusterIdx
+		'''
+		cluster = []
+		key = 'centroid_' + str(clusterIdx + 1)
+		for i in range(len(self.assignments)):
+			if self.assignments[i]['assignment'] == key:
+				cluster.append(self.assignments[i])
+		return cluster
