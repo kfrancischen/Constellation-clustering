@@ -4,7 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import math
 import scipy.cluster.hierarchy as hac
 
-def visualize(assignments):
+def visualize(assignments, algorithm):
 	xs = []
 	ys = []
 	zs = []
@@ -23,6 +23,7 @@ def visualize(assignments):
 	ax.set_xlabel('X Axis')
 	ax.set_ylabel('Y Axis')
 	ax.set_zlabel('Z Axis')
+	ax.set_title(algorithm)
 
 	plt.show()
 
