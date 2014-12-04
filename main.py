@@ -164,7 +164,7 @@ class clusteringApplication(QWidget):
 		'''
 		if self.ui.algorithmBox.currentText() != 'Hierachical_2':
 
-			visualization.visualize(self.assignments)	
+			visualization.visualize(self.assignments, self.ui.algorithmBox.currentText())	
 		else:
 			visualization.drawDendrogram(self.linkMatrix)
 
