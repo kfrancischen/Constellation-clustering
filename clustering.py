@@ -84,12 +84,12 @@ constellationNames = dataProcessing.getConstellationNames(starsNeedClustering)
 if args.algorithm == 'Kmeans':
 	K = args.K
 	# running K means for 1000 times with 20 centroids
-	standardKMeans = algorithms.Kmeans(starsNeedClustering,K)
-	standardKMeans.randInitCentroid()
+	standardKMeans = algorithms.KMeansPlusPlus(starsNeedClustering,K)
+	#standardKMeans.randInitCentroid()
 	#standardKMeans.decisiveInitCentroid()
 	#standardKMeans.runStandardKmeansWithIter(2000)
-	standardKMeans.runStandardKmeansWithoutIter()
-
+	#standardKMeans.runStandardKmeansWithoutIter()
+	standardKMeans.runKmeansPlusPlus()
 	# output the stars that belong to centroid 1
 	# cluster_1 = algorithms.getCluster(1, assignments)
 
