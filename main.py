@@ -202,6 +202,8 @@ class clusteringApplication(QWidget):
 			#standardKmeans.runStandardKmeansWithoutIter()
 			standardKmeans.runKmeansPlusPlus()
 			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(K)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			self.ui.clusteringResults.appendPlainText('# The Silhouette Coefficient is ' + str(standardKmeans.silhouetteScore) + '\n')
+			self.ui.clusteringResults.appendPlainText('# The Adjusted Rand index is ' + str(standardKmeans.adjustedScore) + '\n')
 			#self.ui.clusteringResults.appendPlainText('# The overall cosine dissimilarity is ' + str(standardKmeans.getDissimilarity()))
 			for i in range(K):
 				self.ui.clusteringResults.appendPlainText('\n**************************************')
@@ -213,7 +215,7 @@ class clusteringApplication(QWidget):
 					names.append(cluster[idx]['name'][-3:])
 				if names != []:
 					logScore += numpy.log(len(list(set(names))))
-			self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
+			#self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardKmeans.assignments
 
 		#----------------------------------------------------------------------------------#
@@ -229,6 +231,8 @@ class clusteringApplication(QWidget):
 			standardDBS.runDBA()
 			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(standardDBS.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
 			noise = standardDBS.getNoise()
+			self.ui.clusteringResults.appendPlainText('# The Silhouette Coefficient is ' + str(standardDBS.silhouetteScore) + '\n')
+			self.ui.clusteringResults.appendPlainText('# The Adjusted Rand index is ' + str(standardDBS.adjustedScore) + '\n')
 			self.ui.clusteringResults.appendPlainText('\n**************************************')
 			self.ui.clusteringResults.appendPlainText('Stars that are detected as noises:\n')
 			# output noise
@@ -259,6 +263,8 @@ class clusteringApplication(QWidget):
 			standardHC = algorithms.aggolomerativeClustering(starsNeedClustering, n_cluster)
 			standardHC.runHierachicalClustering()
 			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(n_cluster)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			self.ui.clusteringResults.appendPlainText('# The Silhouette Coefficient is ' + str(standardHC.silhouetteScore) + '\n')
+			self.ui.clusteringResults.appendPlainText('# The Adjusted Rand index is ' + str(standardHC.adjustedScore) + '\n')
 			for i in range(n_cluster):
 				self.ui.clusteringResults.appendPlainText('\n**************************************')
 				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
@@ -269,7 +275,7 @@ class clusteringApplication(QWidget):
 					names.append(cluster[idx]['name'][-3:])
 				if names != []:
 					logScore += numpy.log(len(list(set(names))))
-			self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
+			#self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardHC.assignments
 
 		#----------------------------------------------------------------------------------#
@@ -295,6 +301,8 @@ class clusteringApplication(QWidget):
 			standardSpectralClustering = algorithms.spectralClustering(starsNeedClustering, n_cluster)
 			standardSpectralClustering.runSpectralClustering()
 			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(n_cluster)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			self.ui.clusteringResults.appendPlainText('# The Silhouette Coefficient is ' + str(standardSpectralClustering.silhouetteScore) + '\n')
+			self.ui.clusteringResults.appendPlainText('# The Adjusted Rand index is ' + str(standardSpectralClustering.adjustedScore) + '\n')
 			for i in range(n_cluster):
 				self.ui.clusteringResults.appendPlainText('\n**************************************')
 				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
@@ -305,7 +313,7 @@ class clusteringApplication(QWidget):
 					names.append(cluster[idx]['name'][-3:])
 				if names != []:
 					logScore += numpy.log(len(list(set(names))))
-			self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
+			#self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = standardSpectralClustering.assignments
 
 		#----------------------------------------------------------------------------------#
@@ -320,7 +328,9 @@ class clusteringApplication(QWidget):
 			standardAP = algorithms.affinityPropagation(starsNeedClustering, damping, max_iter)
 			standardAP.runAffinityPropagation()
 			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(standardAP.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
-			self.ui.clusteringResults.appendPlainText('# The overall cosine dissimilarity is ' + str(standardAP.getDissimilarity()))
+			self.ui.clusteringResults.appendPlainText('# The Silhouette Coefficient is ' + str(standardAP.silhouetteScore) + '\n')
+			self.ui.clusteringResults.appendPlainText('# The Adjusted Rand index is ' + str(standardAP.adjustedScore) + '\n')
+			#self.ui.clusteringResults.appendPlainText('# The overall cosine dissimilarity is ' + str(standardAP.getDissimilarity()))
 			centers = standardAP.getCenters()
 			for i in range(standardAP.getNumOfClusters()):
 				self.ui.clusteringResults.appendPlainText('\n**************************************')
@@ -357,7 +367,7 @@ class clusteringApplication(QWidget):
 					names.append(cluster[idx]['name'][-3:])
 				if names != []:
 					logScore += numpy.log(len(list(set(names))))
-			self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
+			#self.ui.clusteringResults.appendPlainText('\nThe total log Score is '+str(logScore))
 			self.assignments = rote.assignments
 			
 			
