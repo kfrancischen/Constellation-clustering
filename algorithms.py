@@ -175,14 +175,51 @@ class Kmeans:
 					CONTINUE_FLAG = True
 					break
 		return
-		
+	
+# algorithm 1.1: Kmeans from sklearn
+from sklearn.cluster import KMeans
+from scipy.spatial import distance
+import numpy
+class KMeansPlusPlus:
+	'''
+		This class will take all the filterd data and perform kmeans ++ based on sklearn
+	'''
+	def __init__(self, stars, K):
+		'''
+			This function will initialize the class
+			@K: number of clusters
+		'''
+		self.assignments = copy.deepcopy(stars)
+		self.K = K
+		self.coordinates = []
+		for i in range(len(self.assignments)):
+			coordinate = [self.assignments[i]['x_coor'], self.assignments[i]['y_coor'], self.assignments[i]['z_coor']]
+			self.coordinates.append(coordinate)
 
+	def runKmeansPlusPlus(self):
+		'''
+			This function will run the kmeans ++ algorithm
+		'''
+		distMatrix = distance.squareform(distance.pdist(self.coordinates, 'cosine'))
+		model = KMeans(n_clusters = self.K, init = 'k-means++', n_init = 10, max_iter = 300).fit(distMatrix)
+		belongs = model.labels_.tolist()
+		for i in range(len(belongs)):
+			self.assignments[i]['assignment'] = 'centroid_' + str(belongs[i]+1)
+
+	def getCluster(self, clusterIdx):
+		'''
+			This function outputs the cluster with clusterIdx
+		'''
+		cluster = []
+		key = 'centroid_' + str(clusterIdx+1)
+		for i in range(len(self.assignments)):
+			if self.assignments[i]['assignment'] == key:
+				cluster.append(self.assignments[i])
+		return cluster
 
 # algorithm 2: standard DBSCAN algorithm, using sklearn package
 
 from sklearn.cluster import DBSCAN
-from scipy.spatial import distance
-import numpy
 class densityBasedClustering:
 	'''
 		This class will take all the filtered data and perform DBSCAN
