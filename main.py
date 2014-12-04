@@ -197,11 +197,12 @@ class clusteringApplication(QWidget):
 			K = int(self.ui.parameterWidget.item(1,1).text())
 			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th) 
 			logScore = 0
-			standardKmeans = algorithms.Kmeans(starsNeedClustering, K)
-			standardKmeans.randInitCentroid()
-			standardKmeans.runStandardKmeansWithoutIter()
+			standardKmeans = algorithms.KMeansPlusPlus(starsNeedClustering, K)
+			#standardKmeans.randInitCentroid()
+			#standardKmeans.runStandardKmeansWithoutIter()
+			standardKmeans.runKmeansPlusPlus()
 			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(K)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
-			self.ui.clusteringResults.appendPlainText('# The overall cosine dissimilarity is ' + str(standardKmeans.getDissimilarity()))
+			#self.ui.clusteringResults.appendPlainText('# The overall cosine dissimilarity is ' + str(standardKmeans.getDissimilarity()))
 			for i in range(K):
 				self.ui.clusteringResults.appendPlainText('\n**************************************')
 				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
