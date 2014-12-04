@@ -5,6 +5,7 @@ import math
 import random
 import copy
 import basicFun
+import dataProcessing
 
 # algorithm 1: standard K-means algorithm
 
@@ -180,6 +181,8 @@ class Kmeans:
 from sklearn.cluster import KMeans
 from scipy.spatial import distance
 import numpy
+from sklearn import metrics
+
 class KMeansPlusPlus:
 	'''
 		This class will take all the filterd data and perform kmeans ++ based on sklearn
@@ -192,6 +195,8 @@ class KMeansPlusPlus:
 		self.assignments = copy.deepcopy(stars)
 		self.K = K
 		self.coordinates = []
+		self.silhouetteScore = 0
+		self.adjustedScore = 0
 		for i in range(len(self.assignments)):
 			coordinate = [self.assignments[i]['x_coor'], self.assignments[i]['y_coor'], self.assignments[i]['z_coor']]
 			self.coordinates.append(coordinate)
@@ -205,6 +210,10 @@ class KMeansPlusPlus:
 		belongs = model.labels_.tolist()
 		for i in range(len(belongs)):
 			self.assignments[i]['assignment'] = 'centroid_' + str(belongs[i]+1)
+		self.silhouetteScore = metrics.silhouette_score(distMatrix, model.labels_, metric = 'cosine')
+		trueLabel = dataProcessing.getTrueLabel(self.assignments)
+		self.adjustedScore = metrics.adjusted_rand_score(belongs, trueLabel)
+
 
 	def getCluster(self, clusterIdx):
 		'''
@@ -216,6 +225,8 @@ class KMeansPlusPlus:
 			if self.assignments[i]['assignment'] == key:
 				cluster.append(self.assignments[i])
 		return cluster
+	
+
 
 # algorithm 2: standard DBSCAN algorithm, using sklearn package
 
@@ -235,6 +246,8 @@ class densityBasedClustering:
 		self.minDist = minDist
 		self.coordinates = []
 		self.numOfClusters = 0
+		self.silhouetteScore = 0
+		self.adjustedScore = 0
 		for i in range(len(self.assignments)):
 			coordinate = [self.assignments[i]['x_coor'], self.assignments[i]['y_coor'], self.assignments[i]['z_coor']]
 			self.coordinates.append(coordinate)
@@ -251,11 +264,14 @@ class densityBasedClustering:
 				#distMatrix[i,j] *= numpy.exp(self.assignments[i]['brightness'] + self.assignments[j]['brightness'])
 				#distMatrix[i,j] *= self.assignments[i]['brightness'] + self.assignments[j]['brightness']
 
-		db = DBSCAN(eps = self.Eps, min_samples = self.minDist).fit(distMatrix)
-		belongs = db.labels_.tolist()
+		model = DBSCAN(eps = self.Eps, min_samples = self.minDist).fit(distMatrix)
+		belongs = model.labels_.tolist()
 		for i in range(len(belongs)):
 			self.assignments[i]['assignment'] = 'centroid_' + str(belongs[i]+1)
 		self.numOfClusters = len(set(belongs)) - (1 if -1 in belongs else 0)
+		self.silhouetteScore = metrics.silhouette_score(distMatrix, model.labels_, metric = 'cosine')
+		trueLabel = dataProcessing.getTrueLabel(self.assignments)
+		self.adjustedScore = metrics.adjusted_rand_score(belongs, trueLabel)
 
 	def getNumOfClusters(self):
 		'''
@@ -306,6 +322,8 @@ class aggolomerativeClustering:
 		self.n_clusters = n_clusters
 		self.assignments = copy.deepcopy(stars)
 		self.coordinates = []
+		self.silhouetteScore = 0
+		self.adjustedScore = 0
 		for i in range(len(self.assignments)):
 			coordinate = [self.assignments[i]['x_coor'], self.assignments[i]['y_coor'], self.assignments[i]['z_coor']]
 			self.coordinates.append(coordinate)
@@ -319,7 +337,10 @@ class aggolomerativeClustering:
 		belongs = model.labels_.tolist()
 		for i in range(len(belongs)):
 			self.assignments[i]['assignment'] = 'centroid_' + str(belongs[i] + 1)
-	
+		self.silhouetteScore = metrics.silhouette_score(distMatrix, model.labels_, metric = 'cosine')
+		trueLabel = dataProcessing.getTrueLabel(self.assignments)
+		self.adjustedScore = metrics.adjusted_rand_score(belongs, trueLabel)
+
 	def getCluster(self, clusterIdx):
 		'''
 			This function outputs stars belonging to clusterIdx
@@ -375,6 +396,8 @@ class spectralClustering:
 		self.n_clusters = n_clusters
 		self.assignments = copy.deepcopy(stars)
 		self.coordinates = []
+		self.silhouetteScore = 0
+		self.adjustedScore = 0
 		for i in range(len(self.assignments)):
 			coordinate = [self.assignments[i]['x_coor'], self.assignments[i]['y_coor'], self.assignments[i]['z_coor']]
 			self.coordinates.append(coordinate)
@@ -388,7 +411,10 @@ class spectralClustering:
 		belongs = model.labels_.tolist()
 		for i in range(len(belongs)):
 			self.assignments[i]['assignment'] = 'centroid_' + str(belongs[i] + 1)
-	
+		self.silhouetteScore = metrics.silhouette_score(distMatrix, model.labels_, metric = 'cosine')
+		trueLabel = dataProcessing.getTrueLabel(self.assignments)
+		self.adjustedScore = metrics.adjusted_rand_score(belongs, trueLabel)
+
 	def getCluster(self, clusterIdx):
 		'''
 			This function outputs stars belonging to clusterIdx
@@ -418,6 +444,8 @@ class affinityPropagation:
 		self.max_iter = max_iter
 		self.coordinates = []
 		self.center_id = []
+		self.silhouetteScore = 0
+		self.adjustedScore = 0
 		for i in range(len(self.assignments)):
 			coordinate = [self.assignments[i]['x_coor'], self.assignments[i]['y_coor'], self.assignments[i]['z_coor']]
 			self.coordinates.append(coordinate)
@@ -433,7 +461,10 @@ class affinityPropagation:
 		belongs = model.labels_.tolist()
 		for i in range(len(belongs)):
 			self.assignments[i]['assignment'] = 'centroid_' + str(belongs[i] + 1)
-	
+		self.silhouetteScore = metrics.silhouette_score(distMatrix, model.labels_, metric = 'cosine')
+		trueLabel = dataProcessing.getTrueLabel(self.assignments)
+		self.adjustedScore = metrics.adjusted_rand_score(belongs, trueLabel)
+
 	def getNumOfClusters(self):
 		'''
 			This function will return the number of clusters
