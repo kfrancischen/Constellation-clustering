@@ -75,13 +75,25 @@ def selectNames(data, constellationName, threshold = None):
 
 def getConstellationNames(data):
 	'''
-		This funcition will return all the constellation names
+		This function will return all the constellation names
 	'''
 	constellationNames = {}
 	for index in range(len(data)):
 		constellationNames[data[index]['name'][-3:]] = 1
 	return constellationNames
 
+def getTrueLabel(data):
+	'''
+		This function will give the true label for all the data
+	'''
+	trueLabel = []
+	constellationNames = getConstellationNames(data).keys()
+	for i in range(len(data)):
+		for j in range(len(constellationNames)):
+			if data[i]['name'][-3:] == constellationNames[j]:
+				trueLabel.append(j)
+				continue
+	return trueLabel
 
 '''
 database = readJson()
