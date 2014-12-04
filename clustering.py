@@ -93,7 +93,7 @@ if args.algorithm == 'Kmeans':
 	# output the stars that belong to centroid 1
 	# cluster_1 = algorithms.getCluster(1, assignments)
 
-	visualization.visualize(standardKMeans.assignments)
+	visualization.visualize(standardKMeans.assignments, 'Kmeans')
 	#print len(assignments), len(cluster_1), cluster_1
 	# print centroids, assignments
 
@@ -107,14 +107,14 @@ elif args.algorithm == 'DBSCAN':
 	#print standardDBS.getNumOfClusters()
 	noise = standardDBS.getNoise()
 	#print 'Number of noise stars: ', len(noise)
-	visualization.visualize(standardDBS.assignments)
+	visualization.visualize(standardDBS.assignments, 'DBSCAN')
 
 # if the user runs Hierachical Clustering
 elif args.algorithm == 'HC':
 	n_cluster = args.N
 	standardHC = algorithms.aggolomerativeClustering(starsNeedClustering, n_cluster)
 	standardHC.runHierachicalClustering()
-	#visualization.visualize(standardHC.assignments)
+	visualization.visualize(standardHC.assignments, 'Hierarchical Clustering')
 
 # if the user runs Hierachical Clustering_2
 elif args.algorithm == 'HC_2' and  args.n == 0:
@@ -127,7 +127,7 @@ elif args.algorithm == 'spectral':
 	n_cluster = args.N
 	standardSpectralClustering = algorithms.spectralClustering(starsNeedClustering, n_cluster)
 	standardSpectralClustering.runSpectralClustering()
-	visualization.visualize(standardSpectralClustering.assignments)
+	visualization.visualize(standardSpectralClustering.assignments, 'Spectral Clustering')
 
 # if the user runs affinity propagation
 elif args.algorithm == 'affinity':
@@ -135,13 +135,13 @@ elif args.algorithm == 'affinity':
 	max_iter = args.MI
 	standardAP = algorithms.affinityPropagation(starsNeedClustering, damping, max_iter)
 	standardAP.runAffinityPropagation()
-	visualization.visualize(standardAP.assignments)
+	visualization.visualize(standardAP.assignments, 'Affinity Propagation')
 
 # if the user runs the route classification
 elif args.algorithm == 'rote' and args.n == 1:
 	roteClassification = algorithms.roteClassification(starsNeedClustering, constellationNames)
 	roteClassification.runRoteClassification()
-	visualization.visualize(roteClassification.assignments)
+	visualization.visualize(roteClassification.assignments, 'Rote Algorithm')
 
 # if no such algorithm
 else:
