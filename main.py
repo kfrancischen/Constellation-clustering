@@ -201,7 +201,7 @@ class clusteringApplication(QWidget):
 			#standardKmeans.randInitCentroid()
 			#standardKmeans.runStandardKmeansWithoutIter()
 			standardKmeans.runKmeansPlusPlus()
-			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(K)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			self.ui.clusteringResults.setPlainText('# Algorithm finished. '+ str(K)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
 			self.ui.clusteringResults.appendPlainText('# The Silhouette Coefficient is ' + str(standardKmeans.silhouetteScore) + '\n')
 			self.ui.clusteringResults.appendPlainText('# The Adjusted Rand index is ' + str(standardKmeans.adjustedScore) + '\n')
 			#self.ui.clusteringResults.appendPlainText('# The overall cosine dissimilarity is ' + str(standardKmeans.getDissimilarity()))
@@ -229,7 +229,7 @@ class clusteringApplication(QWidget):
 			logScore = 0
 			standardDBS = algorithms.densityBasedClustering(starsNeedClustering, Eps, minDist) 
 			standardDBS.runDBA()
-			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(standardDBS.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			self.ui.clusteringResults.setPlainText('# Algorithm finished. '+ str(standardDBS.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
 			noise = standardDBS.getNoise()
 			self.ui.clusteringResults.appendPlainText('# The Silhouette Coefficient is ' + str(standardDBS.silhouetteScore) + '\n')
 			self.ui.clusteringResults.appendPlainText('# The Adjusted Rand index is ' + str(standardDBS.adjustedScore) + '\n')
@@ -262,7 +262,7 @@ class clusteringApplication(QWidget):
 			logScore = 0
 			standardHC = algorithms.aggolomerativeClustering(starsNeedClustering, n_cluster)
 			standardHC.runHierachicalClustering()
-			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(n_cluster)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			self.ui.clusteringResults.setPlainText('# Algorithm finished. '+ str(n_cluster)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
 			self.ui.clusteringResults.appendPlainText('# The Silhouette Coefficient is ' + str(standardHC.silhouetteScore) + '\n')
 			self.ui.clusteringResults.appendPlainText('# The Adjusted Rand index is ' + str(standardHC.adjustedScore) + '\n')
 			for i in range(n_cluster):
@@ -286,7 +286,7 @@ class clusteringApplication(QWidget):
 			starsNeedClustering = dataProcessing.selectBrightness(self.starsWithName, bright_th)
 			HC_2 = algorithms.hierarchicalClustering(starsNeedClustering)
 			HC_2.runHC_Version_2()
-			self.ui.clusteringResults.setPlainText('# Algorithm finised. \n\n# Press "visualizing" to see the hierarchical trees.\n')
+			self.ui.clusteringResults.setPlainText('# Algorithm finished. \n\n# Press "visualizing" to see the hierarchical trees.\n')
 			self.linkMatrix = HC_2.linkMatrix;
 				
 
@@ -300,7 +300,7 @@ class clusteringApplication(QWidget):
 			logScore = 0
 			standardSpectralClustering = algorithms.spectralClustering(starsNeedClustering, n_cluster)
 			standardSpectralClustering.runSpectralClustering()
-			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(n_cluster)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			self.ui.clusteringResults.setPlainText('# Algorithm finished. '+ str(n_cluster)+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
 			self.ui.clusteringResults.appendPlainText('# The Silhouette Coefficient is ' + str(standardSpectralClustering.silhouetteScore) + '\n')
 			self.ui.clusteringResults.appendPlainText('# The Adjusted Rand index is ' + str(standardSpectralClustering.adjustedScore) + '\n')
 			for i in range(n_cluster):
@@ -327,7 +327,7 @@ class clusteringApplication(QWidget):
 			logScore = 0
 			standardAP = algorithms.affinityPropagation(starsNeedClustering, damping, max_iter)
 			standardAP.runAffinityPropagation()
-			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(standardAP.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			self.ui.clusteringResults.setPlainText('# Algorithm finished. '+ str(standardAP.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
 			self.ui.clusteringResults.appendPlainText('# The Silhouette Coefficient is ' + str(standardAP.silhouetteScore) + '\n')
 			self.ui.clusteringResults.appendPlainText('# The Adjusted Rand index is ' + str(standardAP.adjustedScore) + '\n')
 			#self.ui.clusteringResults.appendPlainText('# The overall cosine dissimilarity is ' + str(standardAP.getDissimilarity()))
@@ -356,7 +356,7 @@ class clusteringApplication(QWidget):
 			logScore = 0
 			rote = algorithms.roteClassification(starsNeedClustering, constellationNames)
 			rote.runRoteClassification()
-			self.ui.clusteringResults.setPlainText('# Algorithm finised. '+ str(rote.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
+			self.ui.clusteringResults.setPlainText('# Algorithm finished. '+ str(rote.getNumOfClusters())+ ' Clusters found!\n\n# Press "visualizing" to see the 3D results.\n\n# Clusters are shown below.\n')
 			for i in range(rote.getNumOfClusters()):
 				self.ui.clusteringResults.appendPlainText('\n**************************************')
 				self.ui.clusteringResults.appendPlainText('Stars belong to cluster '+str(i+1)+':\n')
