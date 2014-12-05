@@ -20,10 +20,14 @@ def visualize(assignments, algorithm):
 	fig = plt.figure()
 	ax = fig.add_subplot(111, projection = '3d')
 	ax.scatter(xs,ys,zs,s = size, c = color, marker='o')
-	ax.set_xlabel('X Axis')
-	ax.set_ylabel('Y Axis')
-	ax.set_zlabel('Z Axis')
-	ax.set_title(algorithm)
+	#ax.set_xlabel('X Axis')
+	#ax.set_ylabel('Y Axis')
+	#ax.set_zlabel('Z Axis')
+	ax.set_xticks([])
+	ax.set_yticks([])
+	ax.set_zticks([])
+	ax.set_axis_off()
+	#ax.set_title(algorithm)
 
 	plt.show()
 
@@ -32,6 +36,8 @@ def drawDendrogram(linkMatrix):
 	ax = fig.add_subplot(111)
 	tree = hac.dendrogram(linkMatrix)
 	ax.set_yticks([])
+	ax.set_xticks([])
+	ax.set_axis_off()
 
 	plt.show()
 
