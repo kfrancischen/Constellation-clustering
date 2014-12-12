@@ -455,6 +455,10 @@ class affinityPropagation:
 			This function runs the affinity propagation algorithm
 		'''
 		distMatrix = distance.squareform(distance.pdist(self.coordinates, 'cosine'))
+		size = distMatrix.shape
+		for i in range(size[0]):
+			for j in range(size[1]):
+				distMatrix[i,j] = 2 - distMatrix[i,j]
 		model = AffinityPropagation(damping = self.damping, max_iter = self.max_iter,affinity = 'precomputed')
 		model.fit(distMatrix)
 		self.center_id = model.cluster_centers_indices_.tolist()
