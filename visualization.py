@@ -32,7 +32,7 @@ def visualize(assignments, algorithm):
 	plt.show()
 
 def drawDendrogram(linkMatrix):
-	fig = plt.figure()
+	fig = plt.figure(linewidth=10)
 	ax = fig.add_subplot(111)
 	tree = hac.dendrogram(linkMatrix)
 	ax.set_yticks([])
